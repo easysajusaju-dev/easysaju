@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+
+<div class="p-4 sm:p-8 space-y-8 min-h-screen font-sans">
+  <div class="relative bg-white rounded-3xl shadow-xl overflow-hidden max-w-xl mx-auto p-6 sm:p-8 md:p-10">
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 h-28 sm:h-32 -mx-6 sm:-mx-8 md:-mx-10 -mt-6 sm:-mt-8 md:-mt-10 mb-8 flex items-center justify-center">
+      <div class="text-center text-white p-4">
+        <h1 class="text-3xl sm:text-4xl font-bold tracking-tight">이지사주</h1>
+        <p class="text-sm opacity-80 mt-1">✨ 사주 분석 결과를 카카오톡으로 바로 받아보세요 ✨</p>
+      </div>
+    </div>
+    <div id="beforeLogin">
+      <p class="text-center text-gray-700 font-medium mb-4">사주 분석을 위해 카카오톡 로그인이 필요해요.<br>아래 버튼을 눌러 시작해주세요!</p>
+      <div class="bg-gray-100 p-3 rounded-lg text-center text-xs text-gray-600 mb-4">PC에서는 카카오 계정으로 로그인해야 하며,<br>**QR코드 로그인**을 이용하시면 더욱 편리합니다.</div>
+      <button type="button" id="kakaoLoginBtn" class="w-full py-4 flex items-center justify-center font-bold text-gray-800 rounded-full bg-yellow-400 hover:bg-yellow-500 transition transform hover:scale-105 shadow-lg"><svg class="w-6 h-6 mr-2" viewBox="0 0 32 32"><path d="M16 4.64c-6.96 0-12.64 4.48-12.64 10.08 0 3.84 2.64 7.28 6.4 8.96l-2.16 7.92 8.4-4.56c.64.08 1.28.08 1.92.08 6.96 0 12.64-4.48 12.64-10.08s-5.68-10.4-12.64-10.4z" fill="#000"></path></svg>카카오로 1초 만에 시작하기</button>
+    </div>
+    <form id="fortuneForm" class="hidden space-y-6">
+       <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-4 flex items-center"><span class="bg-blue-100 text-blue-500 rounded-full p-2 mr-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg></span>기본 정보</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div><label for="name" class="block text-sm font-medium text-gray-700 mb-1">성명</label><input type="text" id="name" name="name" placeholder="이름을 입력하세요" required class="w-full px-4 py-2 border border-gray-300 rounded-xl"></div>
+          <div><label for="phone" class="block text-sm font-medium text-gray-700 mb-1">전화번호</label><input type="tel" id="phone" name="phone" placeholder="010-1234-5678" required class="w-full px-4 py-2 border border-gray-300 rounded-xl"></div>
+        </div>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-2 flex items-center"><span class="bg-red-100 text-red-500 rounded-full p-2 mr-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V9h14v10zM5 7V5h14v2H5z"/></svg></span>사주팔자 정보</h2>
+        <p class="text-sm text-gray-600 mb-4">천을귀인 만세력 등의 어플에서 사주를 조회 후<br class="sm:hidden"> 정보를 입력하세요 (한글, 한자 모두 가능!)</p>
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div><label for="yearJoo" class="block text-sm font-medium text-gray-700 mb-1">년주</label><input type="text" id="yearJoo" name="yearJoo" placeholder="예) 갑자" required class="w-full px-4 py-2 border border-gray-300 rounded-xl"></div>
+          <div><label for="monthJoo" class="block text-sm font-medium text-gray-700 mb-1">월주</label><input type="text" id="monthJoo" name="monthJoo" placeholder="예) 병인" required class="w-full px-4 py-2 border border-gray-300 rounded-xl"></div>
+          <div><label for="dayJoo" class="block text-sm font-medium text-gray-700 mb-1">일주</label><input type="text" id="dayJoo" name="dayJoo" placeholder="예) 무진" required class="w-full px-4 py-2 border border-gray-300 rounded-xl"></div>
+          <div><label for="timeJoo" class="block text-sm font-medium text-gray-700 mb-1">시주</label><input type="text" id="timeJoo" name="timeJoo" placeholder="예) 경오" required class="w-full px-4 py-2 border border-gray-300 rounded-xl"></div>
+        </div>
+      </div>
+      <div class="bg-white p-6 rounded-2xl shadow-sm border border-gray-200">
+        <h2 class="text-lg sm:text-xl font-bold text-gray-800 mb-4 flex items-center"><span class="bg-green-100 text-green-500 rounded-full p-2 mr-2"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c5.52 0 10 4.48 10 10s-4.48 10-10 10S2 17.52 2 12 6.48 2 12 2zm-1 14h2v2h-2v-2zm-1-8h4v8h-4V8z"/></svg></span>추가 정보</h2>
+        <div class="grid sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">성별</label>
+            <div class="flex space-x-4">
+              <label class="inline-flex items-center"><input type="radio" name="gender" value="남성" checked class="form-radio text-blue-600"><span class="ml-2 text-gray-700">남성</span></label>
+              <label class="inline-flex items-center"><input type="radio" name="gender" value="여성" class="form-radio text-pink-600"><span class="ml-2 text-gray-700">여성</span></label>
+            </div>
+          </div>
+          <div><label for="question" class="block text-sm font-medium text-gray-700 mb-1">궁금한 점</label><input type="text" id="question" name="question" placeholder="예) 올해 재물운" required class="w-full px-4 py-2 border border-gray-300 rounded-xl"></div>
+        </div>
+      </div>
+      <button type="submit" id="submitBtn" class="w-full py-4 text-center font-bold text-white rounded-full bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 transition transform hover:scale-105 shadow-lg">카카오톡으로 결과 받기</button>
+    </form>
+    <div id="resultContainer" class="hidden mt-8 text-center">
+      <div id="loading" class="hidden"><svg class="animate-spin inline-block w-8 h-8 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.96l-1.414 1.414A9.957 9.957 0 0012 22v-4a5.972 5.972 0 01-4.71-2.28l-.58-.72z"></path></svg></div>
+      <p id="resultMessage" class="font-medium"></p>
+    </div>
+  </div>
+  <footer class="text-center text-gray-500 text-sm mt-8 pb-4">&copy; 2024 이지사주. All rights reserved.</footer>
+</div>
+<script>
+  // ✨ 여기에 '새로운 Apps Script' 배포 URL을 붙여넣으세요! ✨
+  const BACKEND_URL = 'YOUR_NEW_APPS_SCRIPT_URL';
+  // ✨ 여기에 카카오 개발자센터의 'JavaScript 키'를 붙여넣으세요. ✨
+  const KAKAO_JAVASCRIPT_KEY = 'YOUR_KAKAO_JAVASCRIPT_KEY';
+  
+  let kakaoUserInfo = {};
+  
+  try {
+    if (Kakao && !Kakao.isInitialized()) {
+      Kakao.init(KAKAO_JAVASCRIPT_KEY);
+    }
+  } catch(e) { console.error("Kakao SDK 초기화 실패", e); }
+
+  const kakaoLoginBtn = document.getElementById('kakaoLoginBtn');
+  const beforeLoginDiv = document.getElementById('beforeLogin');
+  const fortuneForm = document.getElementById('fortuneForm');
+  const submitBtn = document.getElementById('submitBtn');
+  const resultContainer = document.getElementById('resultContainer');
+  const loading = document.getElementById('loading');
+  const resultMessage = document.getElementById('resultMessage');
+  
+  if (kakaoLoginBtn) {
+    kakaoLoginBtn.addEventListener('click', () => {
+      kakaoLoginBtn.disabled = true;
+      kakaoLoginBtn.textContent = '인증 중...';
+      Kakao.Auth.login({
+        scope: 'profile_nickname, talk_message',
+        success: function(authObj) {
+          Kakao.API.request({
+            url: '/v2/user/me',
+            success: function(res) {
+              kakaoUserInfo.kakaoUserId = res.id;
+              kakaoUserInfo.kakaoNickname = res.kakao_account.profile.nickname;
+              beforeLoginDiv.classList.add('hidden');
+              fortuneForm.classList.remove('hidden');
+            },
+            fail: function(error) { alert('사용자 정보 요청 실패: ' + JSON.stringify(error)); kakaoLoginBtn.disabled = false; kakaoLoginBtn.textContent = '카카오로 1초 만에 시작하기'; }
+          });
+        },
+        fail: function(err) { alert('카카오 로그인 실패: ' + JSON.stringify(err)); kakaoLoginBtn.disabled = false; kakaoLoginBtn.textContent = '카카오로 1초 만에 시작하기'; }
+      });
+    });
+  }
+
+  if (fortuneForm) {
+    fortuneForm.addEventListener('submit', function(event) {
+      event.preventDefault();
+      submitBtn.disabled = true;
+      resultContainer.classList.remove('hidden');
+      loading.classList.remove('hidden');
+      resultMessage.textContent = '사주를 분석하고 카카오톡으로 결과를 보내는 중입니다...';
+      resultMessage.classList.remove('text-red-600', 'text-green-600');
+
+      const userData = {
+        kakaoUserId: kakaoUserInfo.kakaoUserId,
+        kakaoNickname: kakaoUserInfo.kakaoNickname,
+        name: document.getElementById('name').value,
+        phone: document.getElementById('phone').value,
+        yearJoo: document.getElementById('yearJoo').value,
+        monthJoo: document.getElementById('monthJoo').value,
+        dayJoo: document.getElementById('dayJoo').value,
+        timeJoo: document.getElementById('timeJoo').value,
+        gender: document.querySelector('input[name="gender"]:checked').value,
+        question: document.getElementById('question').value,
+      };
+
+      fetch(BACKEND_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        body: JSON.stringify({ action: 'generateFortune', userData: userData }),
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+      })
+      .then(response => response.text())
+      .then(text => {
+        const data = JSON.parse(text);
+        showFinalResult(data);
+      })
+      .catch(error => {
+        showFinalError(error);
+      });
+    });
+  }
+
+  function showFinalResult(response) {
+    loading.classList.add('hidden');
+    resultMessage.textContent = response.message; 
+    if (response.success) {
+      resultMessage.classList.add('text-green-600');
+      submitBtn.textContent = '새로운 분석 요청하기';
+    } else {
+      resultMessage.classList.add('text-red-600');
+      submitBtn.textContent = '다시 시도하기';
+    }
+    submitBtn.disabled = false;
+  }
+  function showFinalError(error) {
+    loading.classList.add('hidden');
+    resultMessage.classList.add('text-red-600');
+    resultMessage.textContent = `치명적인 오류가 발생했습니다: ${error.toString()}`;
+    submitBtn.disabled = false;
+    submitBtn.textContent = '다시 시도하기';
+  }
+</script>
+</body>
+</html>
