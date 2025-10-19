@@ -23,7 +23,7 @@
             background: linear-gradient(135deg, var(--background-start), var(--background-end));
             display: flex;
             justify-content: center;
-            align-items: flex-start; /* 상단 정렬 */
+            align-items: flex-start;
             min-height: 100vh;
             padding: 40px 20px;
             box-sizing: border-box;
@@ -38,156 +38,54 @@
             padding: 30px 40px;
         }
 
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .header { text-align: center; margin-bottom: 30px; }
+        .header h1 { color: var(--primary-color); font-weight: 700; font-size: 26px; margin: 0 0 10px; }
+        .header p { color: #6b7280; font-size: 15px; line-height: 1.6; }
 
-        .header h1 {
-            color: var(--primary-color);
-            font-weight: 700;
-            font-size: 26px;
-            margin: 0 0 10px;
-        }
+        .section-title { font-size: 18px; font-weight: 700; color: var(--primary-color); padding-bottom: 10px; border-bottom: 2px solid #e5e7eb; margin-top: 30px; margin-bottom: 20px; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; color: var(--primary-color); font-weight: 500; margin-bottom: 8px; font-size: 14px; }
+        .input-group { display: flex; gap: 10px; }
 
-        .header p {
-            color: #6b7280;
-            font-size: 15px;
-            line-height: 1.6;
+        select, input[type="text"], input[type="email"], input[type="tel"] {
+            width: 100%; padding: 12px; border: 1px solid var(--input-border); border-radius: 8px; font-size: 16px; font-family: var(--font-family); transition: border-color 0.2s, box-shadow 0.2s;
         }
+        select:focus, input:focus { outline: none; border-color: var(--accent-color); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
 
-        .section-title {
-            font-size: 18px;
-            font-weight: 700;
-            color: var(--primary-color);
-            padding-bottom: 10px;
-            border-bottom: 2px solid #e5e7eb;
-            margin-top: 30px;
-            margin-bottom: 20px;
-        }
+        .styled-radio-group { display: flex; gap: 10px; }
+        .styled-radio-group input[type="radio"] { display: none; }
+        .styled-radio-group label { display: flex; justify-content: center; align-items: center; cursor: pointer; padding: 12px; border: 1px solid var(--input-border); border-radius: 8px; width: 100%; transition: all 0.2s; font-size: 15px; font-weight: 500; }
+        .styled-radio-group input[type="radio"]:checked + label { background-color: var(--accent-color); color: white; border-color: var(--accent-color); }
+        .styled-radio-group label:hover { border-color: var(--accent-color); }
 
-        .form-group {
-            margin-bottom: 20px;
-        }
+        #partner-info-section { max-height: 0; overflow: hidden; opacity: 0; transition: max-height 0.7s ease-in-out, opacity 0.5s ease-in-out, margin-top 0.7s ease-in-out; margin-top: 0; }
+        #partner-info-section.visible { max-height: 1000px; opacity: 1; margin-top: 20px; }
 
-        .form-group label {
-            display: block;
-            color: var(--primary-color);
-            font-weight: 500;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
+        .terms-section { margin-top: 30px; padding: 20px; background-color: #f9fafb; border-radius: 8px; border: 1px solid #e5e7eb; }
+        .term-item { display: flex; align-items: center; margin-bottom: 12px; }
+        .term-item:last-child { margin-bottom: 0; }
+        .term-item input[type="checkbox"] { width: 18px; height: 18px; margin-right: 12px; }
+        .term-item label { font-size: 14px; color: #4b5567; margin-bottom: 0; }
+        .term-item .view-terms { color: #6b7280; text-decoration: underline; cursor: pointer; font-size: 13px; margin-left: 8px; }
+        #agree-all-label { font-weight: 700; }
+        .divider { height: 1px; background-color: #e5e7eb; margin: 15px 0; }
+        .required-text { color: var(--accent-color); }
+        .optional-text { color: #6b7280; }
 
-        .input-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        select, input[type="text"], input[type="email"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            font-size: 16px;
-            font-family: var(--font-family);
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        select:focus, input:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-        }
-
-        .styled-radio-group {
-            display: flex;
-            gap: 10px;
-        }
-
-        .styled-radio-group input[type="radio"] {
-            display: none;
-        }
-
-        .styled-radio-group label {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-            padding: 12px;
-            border: 1px solid var(--input-border);
-            border-radius: 8px;
-            width: 100%;
-            transition: all 0.2s;
-            font-size: 15px;
-            font-weight: 500;
-        }
-
-        .styled-radio-group input[type="radio"]:checked + label {
-            background-color: var(--accent-color);
-            color: white;
-            border-color: var(--accent-color);
-        }
-
-        .styled-radio-group label:hover {
-            border-color: var(--accent-color);
-        }
-
-        #partner-info-section {
-            max-height: 0;
-            overflow: hidden;
-            opacity: 0;
-            transition: max-height 0.7s ease-in-out, opacity 0.5s ease-in-out, margin-top 0.7s ease-in-out;
-            margin-top: 0;
-        }
-
-        #partner-info-section.visible {
-            max-height: 1000px; /* 충분히 큰 값 */
-            opacity: 1;
-            margin-top: 20px;
-        }
-
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(90deg, #4338ca, #6d28d9);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 20px;
-        }
-
-        .submit-btn:hover {
-            box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4);
-            transform: translateY(-2px);
-        }
+        .submit-btn { width: 100%; padding: 16px; background: linear-gradient(90deg, #4338ca, #6d28d9); color: white; border: none; border-radius: 8px; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s; margin-top: 20px; }
+        .submit-btn:hover:not(:disabled) { box-shadow: 0 4px 15px rgba(79, 70, 229, 0.4); transform: translateY(-2px); }
+        .submit-btn:disabled { background: #9ca3af; cursor: not-allowed; }
         
-        .loading-overlay {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity 0.3s, visibility 0.3s;
-            z-index: 1000;
-        }
+        .loading-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.7); display: flex; justify-content: center; align-items: center; opacity: 0; visibility: hidden; transition: opacity 0.3s, visibility 0.3s; z-index: 1000; }
+        .loading-overlay p { color: white; font-size: 18px; font-weight: 500; }
+        .loading-overlay.visible { opacity: 1; visibility: visible; }
 
-        .loading-overlay p {
-            color: white;
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        .loading-overlay.visible {
-            opacity: 1;
-            visibility: visible;
-        }
+        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0, 0, 0, 0.6); display: none; justify-content: center; align-items: center; z-index: 2000; }
+        .modal-overlay.visible { display: flex; }
+        .modal-content { background: white; padding: 30px; border-radius: 8px; max-width: 500px; width: 90%; max-height: 80vh; overflow-y: auto; }
+        .modal-content h3 { margin-top: 0; }
+        .modal-content pre { white-space: pre-wrap; word-wrap: break-word; font-size: 13px; color: #4b5567; background: #f3f4f6; padding: 15px; border-radius: 5px; }
+        .modal-close-btn { display: block; margin-top: 20px; padding: 10px 20px; background: var(--primary-color); color: white; border: none; border-radius: 5px; cursor: pointer; float: right; }
 
         @media (max-width: 600px) {
             body { padding: 20px 10px; }
@@ -200,237 +98,130 @@
 <body>
 
     <div class="container">
-        <div class="header">
-            <h1>운명 보고서 신청하기</h1>
-            <p>궁금한 운세를 선택하고 정보를 입력해주세요.</p>
-        </div>
-
+        <div class="header"><h1>운명 보고서 신청하기</h1><p>궁금한 운세를 선택하고 정보를 입력해주세요.</p></div>
         <form id="saju-form">
-            <!-- 상품 선택 -->
-            <div class="form-group">
-                <label for="product-select">상품 선택</label>
-                <select id="product-select" required>
-                    <option value="" disabled selected>분석할 사주 상품을 선택하세요</option>
-                    <option value="life_package" data-type="1">인생 사주 (1인)</option>
-                    <option value="love_package" data-type="2">연애/궁합 (2인)</option>
-                    <option value="reunion_package" data-type="2">재회운 (2인)</option>
-                </select>
-            </div>
-
-            <!-- 신청자 정보 -->
-            <div id="applicant-info-section">
-                <h2 class="section-title">신청자 정보</h2>
-                <div class="form-group">
-                    <label for="applicant-name">이름</label>
-                    <input type="text" id="applicant-name" placeholder="홍길동" required>
-                </div>
-                <div class="form-group">
-                    <label>성별</label>
-                    <div class="styled-radio-group">
-                        <input type="radio" id="applicant-male" name="applicant-gender" value="male" checked>
-                        <label for="applicant-male">남자</label>
-                        <input type="radio" id="applicant-female" name="applicant-gender" value="female">
-                        <label for="applicant-female">여자</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>달력</label>
-                    <div class="styled-radio-group">
-                        <input type="radio" id="applicant-solar" name="applicant-calendar" value="solar" checked>
-                        <label for="applicant-solar">양력</label>
-                        <input type="radio" id="applicant-lunar" name="applicant-calendar" value="lunar">
-                        <label for="applicant-lunar">음력</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>생년월일</label>
-                    <div class="input-group">
-                        <select id="applicant-year" required></select>
-                        <select id="applicant-month" required></select>
-                        <select id="applicant-day" required></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>태어난 시</label>
-                    <div class="input-group">
-                        <select id="applicant-hour" required></select>
-                        <select id="applicant-minute" required></select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- 상대방 정보 (숨김 처리) -->
-            <div id="partner-info-section">
-                <h2 class="section-title">상대방 정보</h2>
-                <div class="form-group">
-                    <label for="partner-name">이름</label>
-                    <input type="text" id="partner-name" placeholder="성춘향">
-                </div>
-                <div class="form-group">
-                    <label>성별</label>
-                    <div class="styled-radio-group">
-                        <input type="radio" id="partner-male" name="partner-gender" value="male" checked>
-                        <label for="partner-male">남자</label>
-                        <input type="radio" id="partner-female" name="partner-gender" value="female">
-                        <label for="partner-female">여자</label>
-                    </div>
-                </div>
-                 <div class="form-group">
-                    <label>달력</label>
-                    <div class="styled-radio-group">
-                        <input type="radio" id="partner-solar" name="partner-calendar" value="solar" checked>
-                        <label for="partner-solar">양력</label>
-                        <input type="radio" id="partner-lunar" name="partner-calendar" value="lunar">
-                        <label for="partner-lunar">음력</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>생년월일</label>
-                    <div class="input-group">
-                        <select id="partner-year"></select>
-                        <select id="partner-month"></select>
-                        <select id="partner-day"></select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label>태어난 시</label>
-                    <div class="input-group">
-                        <select id="partner-hour"></select>
-                        <select id="partner-minute"></select>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- 결과 수신 정보 -->
+            <div class="form-group"><label for="product-select">상품 선택</label><select id="product-select" required><option value="" disabled selected>분석할 사주 상품을 선택하세요</option><option value="life_package" data-type="1">인생 사주 (1인)</option><option value="love_package" data-type="2">연애/궁합 (2인)</option><option value="reunion_package" data-type="2">재회운 (2인)</option></select></div>
+            <div id="applicant-info-section"><h2 class="section-title">신청자 정보</h2><div class="form-group"><label for="applicant-name">이름</label><input type="text" id="applicant-name" placeholder="홍길동" required></div><div class="form-group"><label>성별</label><div class="styled-radio-group"><input type="radio" id="applicant-male" name="applicant-gender" value="male" checked><label for="applicant-male">남자</label><input type="radio" id="applicant-female" name="applicant-gender" value="female"><label for="applicant-female">여자</label></div></div><div class="form-group"><label>달력</label><div class="styled-radio-group"><input type="radio" id="applicant-solar" name="applicant-calendar" value="solar" checked><label for="applicant-solar">양력</label><input type="radio" id="applicant-lunar" name="applicant-calendar" value="lunar"><label for="applicant-lunar">음력</label></div></div><div class="form-group"><label>생년월일</label><div class="input-group"><select id="applicant-year" required></select><select id="applicant-month" required></select><select id="applicant-day" required></select></div></div><div class="form-group"><label>태어난 시</label><div class="input-group"><select id="applicant-hour" required></select><select id="applicant-minute" required></select></div></div></div>
+            <div id="partner-info-section"><h2 class="section-title">상대방 정보</h2><div class="form-group"><label for="partner-name">이름</label><input type="text" id="partner-name" placeholder="성춘향"></div><div class="form-group"><label>성별</label><div class="styled-radio-group"><input type="radio" id="partner-male" name="partner-gender" value="male" checked><label for="partner-male">남자</label><input type="radio" id="partner-female" name="partner-gender" value="female"><label for="partner-female">여자</label></div></div><div class="form-group"><label>달력</label><div class="styled-radio-group"><input type="radio" id="partner-solar" name="partner-calendar" value="solar" checked><label for="partner-solar">양력</label><input type="radio" id="partner-lunar" name="partner-calendar" value="lunar"><label for="partner-lunar">음력</label></div></div><div class="form-group"><label>생년월일</label><div class="input-group"><select id="partner-year"></select><select id="partner-month"></select><select id="partner-day"></select></div></div><div class="form-group"><label>태어난 시</label><div class="input-group"><select id="partner-hour"></select><select id="partner-minute"></select></div></div></div>
             <h2 class="section-title">결과 수신 정보</h2>
-            <div class="form-group">
-                <label for="email">결과 받을 이메일</label>
-                <input type="email" id="email" placeholder="result@example.com" required>
-            </div>
+            <div class="form-group"><label for="phone">연락처 ('-' 없이 숫자만 입력)</label><input type="tel" id="phone" placeholder="01012345678" required></div>
+            <div class="form-group"><label for="email">이메일 (선택)</label><input type="email" id="email" placeholder="result@example.com"></div>
             
-            <button type="submit" class="submit-btn">사주 분석 신청하기</button>
+            <div class="terms-section">
+                <div class="term-item"><input type="checkbox" id="agree-all"><label for="agree-all" id="agree-all-label">전체 동의</label></div>
+                <div class="divider"></div>
+                <div class="term-item"><input type="checkbox" id="agree-privacy" class="agree-item"><label for="agree-privacy"><span class="required-text">[필수]</span> 개인정보 수집/이용 동의</label><span class="view-terms" data-term="privacy">[보기]</span></div>
+                <div class="term-item"><input type="checkbox" id="agree-marketing" class="agree-item"><label for="agree-marketing"><span class="optional-text">[선택]</span> 광고성 정보 수신 동의</label><span class="view-terms" data-term="marketing">[보기]</span></div>
+            </div>
+
+            <button type="submit" class="submit-btn" disabled>사주 분석 신청하기</button>
         </form>
     </div>
 
-    <div class="loading-overlay" id="loading">
-        <p>운명을 분석 중입니다. 잠시만 기다려주세요...</p>
-    </div>
+    <div class="loading-overlay" id="loading"><p>운명을 분석 중입니다...</p></div>
+
+    <div id="modal-privacy" class="modal-overlay"><div class="modal-content"><h3>개인정보 수집/이용 동의 (필수)</h3><pre>1. 수집 항목: [필수] 이름, 성별, 생년월일시, 연락처, [선택] 이메일, 상대방 정보
+2. 수집 목적: 사주 분석 서비스 제공 및 결과 전송
+3. 보유 및 이용 기간: 원칙적으로 서비스 제공 완료 후 30일 이내 파기. 단, 관련 법령에 따라 보존할 필요가 있는 경우 해당 기간 동안 보존합니다.
+4. 동의를 거부할 권리가 있으며, 거부 시 서비스 이용이 불가능합니다.</pre><button class="modal-close-btn">닫기</button></div></div>
+    <div id="modal-marketing" class="modal-overlay"><div class="modal-content"><h3>광고성 정보 수신 동의 (선택)</h3><pre>1. 수집 목적: 신규 서비스, 이벤트, 할인 혜택 등 광고성 정보 제공
+2. 전송 방법: 문자, 알림톡, 이메일 등
+3. 보유 및 이용 기간: 동의 철회 시 또는 서비스 종료 시까지
+4. 동의를 거부할 수 있으며, 거부하더라도 기본 서비스 이용에는 영향이 없습니다.</pre><button class="modal-close-btn">닫기</button></div></div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const productSelect = document.getElementById('product-select');
-            const partnerInfoSection = document.getElementById('partner-info-section');
             const form = document.getElementById('saju-form');
             const loadingOverlay = document.getElementById('loading');
-            
-            // 생년월일시 옵션 채우기 함수
+            const productSelect = document.getElementById('product-select');
+            const partnerInfoSection = document.getElementById('partner-info-section');
+            const submitBtn = document.querySelector('.submit-btn');
+
+            const agreeAll = document.getElementById('agree-all');
+            const agreePrivacy = document.getElementById('agree-privacy');
+            const agreeMarketing = document.getElementById('agree-marketing');
+            const agreeItems = document.querySelectorAll('.agree-item');
+
+            const viewTermsLinks = document.querySelectorAll('.view-terms');
+            const modals = document.querySelectorAll('.modal-overlay');
+            const closeBtns = document.querySelectorAll('.modal-close-btn');
+
             const populateDateTime = (prefix) => {
-                const yearSelect = document.getElementById(`${prefix}-year`);
-                const monthSelect = document.getElementById(`${prefix}-month`);
-                const daySelect = document.getElementById(`${prefix}-day`);
-                const hourSelect = document.getElementById(`${prefix}-hour`);
-                const minuteSelect = document.getElementById(`${prefix}-minute`);
-
+                const year = document.getElementById(`${prefix}-year`), month = document.getElementById(`${prefix}-month`), day = document.getElementById(`${prefix}-day`), hour = document.getElementById(`${prefix}-hour`), minute = document.getElementById(`${prefix}-minute`);
                 const currentYear = new Date().getFullYear();
-                for (let i = currentYear; i >= 1930; i--) {
-                    const option = document.createElement('option');
-                    option.value = i; option.textContent = `${i}년`;
-                    yearSelect.appendChild(option);
-                }
-                for (let i = 1; i <= 12; i++) {
-                    const option = document.createElement('option');
-                    option.value = i; option.textContent = `${i}월`;
-                    monthSelect.appendChild(option);
-                }
-                for (let i = 1; i <= 31; i++) {
-                    const option = document.createElement('option');
-                    option.value = i; option.textContent = `${i}일`;
-                    daySelect.appendChild(option);
-                }
-                for (let i = 0; i <= 23; i++) {
-                    const option = document.createElement('option');
-                    option.value = i; option.textContent = `${i}시`;
-                    hourSelect.appendChild(option);
-                }
-                const unknownHour = document.createElement('option');
-                unknownHour.value = -1; unknownHour.textContent = '시간을 모름';
-                hourSelect.appendChild(unknownHour);
-                for (let i = 0; i <= 59; i++) {
-                    const option = document.createElement('option');
-                    option.value = i; option.textContent = `${i}분`;
-                    minuteSelect.appendChild(option);
-                }
+                for (let i = currentYear; i >= 1930; i--) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}년`; year.appendChild(opt); }
+                for (let i = 1; i <= 12; i++) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}월`; month.appendChild(opt); }
+                for (let i = 1; i <= 31; i++) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}일`; day.appendChild(opt); }
+                for (let i = 0; i <= 23; i++) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}시`; hour.appendChild(opt); }
+                const unknownHour = document.createElement('option'); unknownHour.value = -1; unknownHour.textContent = '시간을 모름'; hour.appendChild(unknownHour);
+                for (let i = 0; i <= 59; i++) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}분`; minute.appendChild(opt); }
             };
-
             populateDateTime('applicant');
             populateDateTime('partner');
-
-            // 상품 선택에 따라 상대방 정보 표시/숨김 처리
+            
             const handleProductChange = () => {
-                const selectedOption = productSelect.options[productSelect.selectedIndex];
-                const type = selectedOption.dataset.type;
+                const selected = productSelect.options[productSelect.selectedIndex];
+                const type = selected.dataset.type;
                 const partnerInputs = partnerInfoSection.querySelectorAll('input, select');
-
                 if (type === '2') {
                     partnerInfoSection.classList.add('visible');
                     partnerInputs.forEach(input => input.required = true);
                 } else {
                     partnerInfoSection.classList.remove('visible');
-                    partnerInputs.forEach(input => input.required = false);
+                    partnerInputs.forEach(input => { input.required = false; input.value = ''; });
                 }
             };
-            
             productSelect.addEventListener('change', handleProductChange);
-            handleProductChange(); // 페이지 로드 시 초기 실행
 
-            // 폼 제출 처리
+            const checkAgreements = () => {
+                const isAllChecked = Array.from(agreeItems).every(item => item.checked);
+                agreeAll.checked = isAllChecked;
+                submitBtn.disabled = !agreePrivacy.checked;
+            };
+            agreeAll.addEventListener('change', () => {
+                agreeItems.forEach(item => item.checked = agreeAll.checked);
+                checkAgreements();
+            });
+            agreeItems.forEach(item => item.addEventListener('change', checkAgreements));
+
+            viewTermsLinks.forEach(link => {
+                link.addEventListener('click', (e) => {
+                    const termType = e.target.dataset.term;
+                    document.getElementById(`modal-${termType}`).classList.add('visible');
+                });
+            });
+            const closeModal = (modal) => modal.classList.remove('visible');
+            closeBtns.forEach(btn => btn.addEventListener('click', (e) => closeModal(e.target.closest('.modal-overlay'))));
+            modals.forEach(modal => modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeModal(modal);
+            }));
+
             form.addEventListener('submit', (event) => {
                 event.preventDefault();
                 loadingOverlay.classList.add('visible');
 
-                // 데이터 수집
-                const applicantData = {
-                    name: document.getElementById('applicant-name').value,
-                    gender: document.querySelector('input[name="applicant-gender"]:checked').value,
-                    calendar: document.querySelector('input[name="applicant-calendar"]:checked').value,
-                    year: document.getElementById('applicant-year').value,
-                    month: document.getElementById('applicant-month').value,
-                    day: document.getElementById('applicant-day').value,
-                    hour: document.getElementById('applicant-hour').value,
-                    minute: document.getElementById('applicant-minute').value,
-                };
-                
+                const applicantData = { name: document.getElementById('applicant-name').value, gender: document.querySelector('input[name="applicant-gender"]:checked').value, calendar: document.querySelector('input[name="applicant-calendar"]:checked').value, year: document.getElementById('applicant-year').value, month: document.getElementById('applicant-month').value, day: document.getElementById('applicant-day').value, hour: document.getElementById('applicant-hour').value, minute: document.getElementById('applicant-minute').value, };
                 let partnerData = null;
                 if (productSelect.options[productSelect.selectedIndex].dataset.type === '2') {
-                    partnerData = {
-                        name: document.getElementById('partner-name').value,
-                        gender: document.querySelector('input[name="partner-gender"]:checked').value,
-                        calendar: document.querySelector('input[name="partner-calendar"]:checked').value,
-                        year: document.getElementById('partner-year').value,
-                        month: document.getElementById('partner-month').value,
-                        day: document.getElementById('partner-day').value,
-                        hour: document.getElementById('partner-hour').value,
-                        minute: document.getElementById('partner-minute').value,
-                    };
+                    partnerData = { name: document.getElementById('partner-name').value, gender: document.querySelector('input[name="partner-gender"]:checked').value, calendar: document.querySelector('input[name="partner-calendar"]:checked').value, year: document.getElementById('partner-year').value, month: document.getElementById('partner-month').value, day: document.getElementById('partner-day').value, hour: document.getElementById('partner-hour').value, minute: document.getElementById('partner-minute').value, };
                 }
-
                 const finalData = {
-                    product: productSelect.value,
-                    email: document.getElementById('email').value,
-                    applicant: applicantData,
-                    partner: partnerData
+                    product: productSelect.value, phone: document.getElementById('phone').value, email: document.getElementById('email').value,
+                    agreements: { privacy: agreePrivacy.checked, marketing: agreeMarketing.checked },
+                    applicant: applicantData, partner: partnerData
                 };
-
                 console.log("서버로 전송할 최종 데이터:", finalData);
-
+                
                 // TODO: 여기에 서버로 데이터를 전송하는 API 호출 코드를 추가합니다.
 
-                // 임시 테스트용
                 setTimeout(() => {
                     loadingOverlay.classList.remove('visible');
                     alert('분석 요청이 완료되었습니다! (현재는 테스트 상태입니다.)');
                 }, 3000);
             });
+            
+            handleProductChange();
+            checkAgreements();
         });
     </script>
 </body>
