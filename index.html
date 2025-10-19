@@ -1,1 +1,341 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>정통 사주 분석 서비스</title>
+    <style>
+        /* Google Fonts - Noto Sans KR */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
+        :root {
+            --primary-color: #4a5568; /* 주요 텍스트 색상 */
+            --accent-color: #6366f1;  /* 버튼 및 강조 색상 */
+            --background-start: #111827; /* 배경 그라데이션 시작 */
+            --background-end: #3730a3;   /* 배경 그라데이션 끝 */
+            --card-background: #ffffff; /* 카드 배경 색상 */
+            --input-border: #d1d5db; /* 입력창 테두리 */
+            --font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--font-family);
+            background: linear-gradient(135deg, var(--background-start), var(--background-end));
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .container {
+            max-width: 500px;
+            width: 100%;
+            background-color: var(--card-background);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            padding: 30px 40px;
+            transition: all 0.3s ease;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            color: var(--primary-color);
+            font-weight: 700;
+            font-size: 24px;
+            margin: 0 0 10px;
+        }
+
+        .header p {
+            color: #6b7280;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--primary-color);
+            font-weight: 500;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .input-group select, .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: var(--font-family);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .input-group select:focus, .form-group input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .gender-options {
+            display: flex;
+            gap: 15px;
+        }
+
+        .gender-options label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+            padding: 10px 15px;
+            border: 1px solid var(--input-border);
+            border-radius: 8px;
+            width: 100%;
+            transition: all 0.2s;
+        }
+
+        .gender-options input[type="radio"] {
+            display: none;
+        }
+
+        .gender-options input[type="radio"]:checked + label {
+            background-color: var(--accent-color);
+            color: white;
+            border-color: var(--accent-color);
+        }
+
+        .gender-options label:hover {
+            border-color: var(--accent-color);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+        }
+
+        .submit-btn:hover {
+            background-color: #4338ca;
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(255, 255, 255, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 16px;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+
+        .loading-overlay.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* 모바일 반응형 */
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+            .container {
+                padding: 20px;
+            }
+            .header h1 {
+                font-size: 20px;
+            }
+            .input-group {
+                flex-wrap: wrap;
+            }
+            .input-group select {
+                flex-basis: calc(33.333% - 8px);
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="header">
+            <h1>정통 사주 분석</h1>
+            <p>생년월일시를 정확하게 입력하시면, AI가 당신의 인생을 깊이 있게 분석해 드립니다.</p>
+        </div>
+
+        <form id="saju-form">
+            <div class="form-group">
+                <label for="name">이름</label>
+                <input type="text" id="name" placeholder="홍길동" required>
+            </div>
+
+            <div class="form-group">
+                <label>성별</label>
+                <div class="gender-options">
+                    <input type="radio" id="male" name="gender" value="male" checked>
+                    <label for="male">남자</label>
+                    <input type="radio" id="female" name="gender" value="female">
+                    <label for="female">여자</label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>생년월일</label>
+                <div class="input-group">
+                    <select id="birth-year" required></select>
+                    <select id="birth-month" required></select>
+                    <select id="birth-day" required></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>태어난 시</label>
+                <div class="input-group">
+                    <select id="birth-hour" required></select>
+                    <select id="birth-minute" required></select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="email">결과 받을 이메일</label>
+                <input type="email" id="email" placeholder="result@example.com" required>
+            </div>
+            
+            <button type="submit" class="submit-btn">분석 결과 보기</button>
+        </form>
+        
+        <div class="loading-overlay" id="loading">
+            <p>사주를 분석 중입니다. 잠시만 기다려주세요...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const yearSelect = document.getElementById('birth-year');
+            const monthSelect = document.getElementById('birth-month');
+            const daySelect = document.getElementById('birth-day');
+            const hourSelect = document.getElementById('birth-hour');
+            const minuteSelect = document.getElementById('birth-minute');
+            const form = document.getElementById('saju-form');
+            const loadingOverlay = document.getElementById('loading');
+
+            const currentYear = new Date().getFullYear();
+            // Populate years (e.g., 1930 to current year)
+            for (let i = currentYear; i >= 1930; i--) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}년`;
+                yearSelect.appendChild(option);
+            }
+
+            // Populate months
+            for (let i = 1; i <= 12; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}월`;
+                monthSelect.appendChild(option);
+            }
+
+            // Populate days
+            for (let i = 1; i <= 31; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}일`;
+                daySelect.appendChild(option);
+            }
+
+            // Populate hours
+            for (let i = 0; i <= 23; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}시`;
+                hourSelect.appendChild(option);
+            }
+            // 23시 다음 子시를 위해 '모름' 옵션도 추가 가능
+            const unknownHour = document.createElement('option');
+            unknownHour.value = -1; // '모름'을 나타내는 값
+            unknownHour.textContent = '시간을 모름';
+            hourSelect.appendChild(unknownHour);
+            hourSelect.value = 7; // 기본값 오전 7시
+
+            // Populate minutes
+            for (let i = 0; i <= 59; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = `${i}분`;
+                minuteSelect.appendChild(option);
+            }
+
+            // Form submission
+            form.addEventListener('submit', (event) => {
+                event.preventDefault(); // Prevent actual form submission
+                
+                loadingOverlay.classList.add('visible');
+
+                // Collect data from the form
+                const formData = {
+                    name: document.getElementById('name').value,
+                    gender: document.querySelector('input[name="gender"]:checked').value,
+                    year: yearSelect.value,
+                    month: monthSelect.value,
+                    day: daySelect.value,
+                    hour: hourSelect.value,
+                    minute: minuteSelect.value,
+                    email: document.getElementById('email').value,
+                };
+                
+                console.log("서버로 전송할 데이터:", formData);
+
+                // =============================================================
+                // TODO: 여기에 서버로 데이터를 전송하는 API 호출 코드를 추가합니다.
+                // fetch('/api/analyze', {
+                //     method: 'POST',
+                //     headers: { 'Content-Type': 'application/json' },
+                //     body: JSON.stringify(formData)
+                // }).then(res => res.json()).then(data => {
+                //     console.log('서버로부터 받은 결과:', data);
+                //     loadingOverlay.classList.remove('visible');
+                //     // 결과 페이지로 이동하거나 결과를 화면에 표시
+                // });
+                // =============================================================
+
+                // 임시로 3초 후 로딩 숨기기 (테스트용)
+                setTimeout(() => {
+                    loadingOverlay.classList.remove('visible');
+                    alert('분석 요청이 완료되었습니다! (현재는 테스트 상태입니다.)');
+                }, 3000);
+            });
+        });
+    </script>
+</body>
+</html>
