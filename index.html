@@ -147,15 +147,63 @@
             const modals = document.querySelectorAll('.modal-overlay');
             const closeBtns = document.querySelectorAll('.modal-close-btn');
 
+            <!-- 새 코드 -->
             const populateDateTime = (prefix) => {
-                const year = document.getElementById(`${prefix}-year`), month = document.getElementById(`${prefix}-month`), day = document.getElementById(`${prefix}-day`), hour = document.getElementById(`${prefix}-hour`), minute = document.getElementById(`${prefix}-minute`);
+                const year = document.getElementById(`${prefix}-year`),
+                    month = document.getElementById(`${prefix}-month`),
+                    day = document.getElementById(`${prefix}-day`),
+                    hour = document.getElementById(`${prefix}-hour`),
+                    minute = document.getElementById(`${prefix}-minute`);
+
+                // 년, 월, 일 채우기 (기존과 동일)
                 const currentYear = new Date().getFullYear();
                 for (let i = currentYear; i >= 1930; i--) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}년`; year.appendChild(opt); }
                 for (let i = 1; i <= 12; i++) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}월`; month.appendChild(opt); }
                 for (let i = 1; i <= 31; i++) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}일`; day.appendChild(opt); }
-                for (let i = 0; i <= 23; i++) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}시`; hour.appendChild(opt); }
-                const unknownHour = document.createElement('option'); unknownHour.value = -1; unknownHour.textContent = '시간을 모름'; hour.appendChild(unknownHour);
-                for (let i = 0; i <= 59; i++) { const opt = document.createElement('option'); opt.value = i; opt.textContent = `${i}분`; minute.appendChild(opt); }
+
+                // 시간 채우기 ('시간을 모름'을 가장 위에 추가)
+                const unknownHour = document.createElement('option');
+                unknownHour.value = -1;
+                unknownHour.textContent = '시간을 모름';
+                hour.appendChild(unknownHour);
+                for (let i = 0; i <= 23; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = `${i}시`;
+                    hour.appendChild(opt);
+                }
+
+                // 분 채우기 ('분을 모름'을 가장 위에 추가)
+                const unknownMinute = document.createElement('option');
+                unknownMinute.value = -1;
+                unknownMinute.textContent = '분을 모름';
+                minute.appendChild(unknownMinute);
+                for (let i = 0; i <= 59; i++) {
+                    const opt = document.createElement('option');
+                    opt.value = i;
+                    opt.textContent = `${i}분`;
+                    minute.appendChild(opt);
+                }
+
+                // 시간과 분의 기본값을 '모름'으로 설정하고, 분을 비활성화
+                hour.value = -1;
+                minute.value = -1;
+                minute.disabled = true;
+
+                // 시간 선택이 바뀔 때마다 실행될 로직 추가
+                hour.addEventListener('change', () => {
+                    if (hour.value == -1) {
+                        // '시간을 모름'을 선택하면, 분도 '모름'으로 바꾸고 비활성화
+                        minute.value = -1;
+                        minute.disabled = true;
+                    } else {
+                        // 특정 시간을 선택하면, 분 선택을 활성화하고 기본값을 0으로 설정
+                        minute.disabled = false;
+                        if (minute.value == -1) {
+                            minute.value = 0;
+                        }
+                    }
+                });
             };
             populateDateTime('applicant');
             populateDateTime('partner');
