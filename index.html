@@ -284,5 +284,40 @@
             checkAgreements();
         });
     </script>
+    <!-- CDN 추가 -->
+<script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.4/solarlunar.min.js"></script>
+
+<script>
+  // 생년월일/시간 변화 감지
+  document.addEventListener('change', (e)=>{
+    if(!['birthDate','birthTime'].includes(e.target.id)) return;
+    const dateVal=document.getElementById('birthDate').value;
+    const timeVal=document.getElementById('birthTime').value;
+    if(!dateVal||!timeVal) return;
+
+    const d=dateVal.split('-');        // 입력값 분리
+    const lunar=solarlunar.solar2lunar(+d[0],+d[1],+d[2]);
+
+    // 자동 채움
+    document.getElementById('yearJoo').value=lunar.gzYear;
+    document.getElementById('monthJoo').value=lunar.gzMonth;
+    document.getElementById('dayJoo').value=lunar.gzDay;
+    document.getElementById('timeJoo').value=getTimeJoo(timeVal);
+
+    // Readonly 표시
+    ['yearJoo','monthJoo','dayJoo','timeJoo'].forEach(id=>{
+      document.getElementById(id).readOnly=true;
+    });
+  });
+
+  // 간단한 시간간지 매핑
+  function getTimeJoo(timeVal){
+    const hour=parseInt(timeVal.split(':')[0]);
+    const gan=['갑','을','병','정','무','기','경','신','임','계'];
+    const ji=['자','축','인','묘','진','사','오','미','신','유','술','해'];
+    const idx=Math.floor((hour+1)/2)%12;
+    return gan[idx%10]+ji[idx];
+  }
+</script>
 </body>
 </html>
