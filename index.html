@@ -1,161 +1,150 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>정통 사주 분석 서비스</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>이지사주 - AI 자동 만세력 분석</title>
+
+<!-- ✅ 만세력 변환 라이브러리 (가장 먼저 로드) -->
+<script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.4/solarlunar.min.js"></script>
+
 <style>
-/* ————————————— 기본 스타일 ————————————— */
-:root {
-  --primary-color: #374151;
-  --accent-color: #4f46e5;
-  --background-start: #1e1b4b;
-  --background-end: #111827;
-  --card-background: #ffffff;
-  --input-border: #d1d5db;
-  --font-family: 'Noto Sans KR', sans-serif;
+body{
+  font-family:'Noto Sans KR',sans-serif;
+  background:linear-gradient(135deg,#1e1b4b,#111827);
+  color:#333;min-height:100vh;
+  display:flex;justify-content:center;align-items:flex-start;padding:30px;
 }
-body {
-  margin:0;
-  font-family:var(--font-family);
-  background:linear-gradient(135deg,var(--background-start),var(--background-end));
-  display:flex;justify-content:center;align-items:flex-start;
-  min-height:100vh;
-  padding:40px 20px;box-sizing:border-box;
+.container{max-width:500px;width:100%;background:#fff;border-radius:14px;box-shadow:0 10px 25px rgba(0,0,0,0.2);padding:30px;}
+h1{text-align:center;color:#374151;margin-bottom:20px;}
+label{font-weight:500;display:block;margin-bottom:6px;}
+input,select{
+  width:100%;padding:10px;border:1px solid #ccc;border-radius:6px;font-size:16px;margin-bottom:12px;
 }
-.container{max-width:550px;width:100%;background:#fff;border-radius:16px;box-shadow:0 20px 40px rgba(0,0,0,0.2);padding:30px 40px;}
-.header{text-align:center;margin-bottom:30px;}
-.header h1{color:var(--primary-color);font-weight:700;font-size:26px;margin:0 0 10px;}
-.header p{color:#6b7280;font-size:15px;line-height:1.6;}
-.section-title{font-size:18px;font-weight:700;color:var(--primary-color);padding-bottom:10px;border-bottom:2px solid #e5e7eb;margin-top:30px;margin-bottom:20px;}
-.form-group{margin-bottom:20px;}
-.form-group label{display:block;color:var(--primary-color);font-weight:500;margin-bottom:8px;font-size:14px;}
-.input-group{display:flex;gap:10px;}
-select,input[type="text"],input[type="email"],input[type="tel"]{width:100%;padding:12px;border:1px solid var(--input-border);border-radius:8px;font-size:16px;font-family:var(--font-family);}
-.submit-btn{width:100%;padding:16px;background:linear-gradient(90deg,#4338ca,#6d28d9);color:white;border:none;border-radius:8px;font-size:18px;font-weight:700;cursor:pointer;margin-top:20px;}
-.submit-btn:disabled{background:#9ca3af;cursor:not-allowed;}
-.loading-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:flex;justify-content:center;align-items:center;opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;z-index:1000;}
-.loading-overlay p{color:white;font-size:18px;font-weight:500;}
-.loading-overlay.visible{opacity:1;visibility:visible;}
-.term-item{display:flex;align-items:center;margin-bottom:12px;}
-.term-item input{width:18px;height:18px;margin-right:12px;}
-.term-item label{font-size:14px;color:#4b5567;}
+button{
+  width:100%;padding:13px;background:#4f46e5;border:none;border-radius:8px;color:#fff;font-size:18px;font-weight:bold;cursor:pointer;
+}
+button:hover{background:#4338ca;}
+#loading{display:none;text-align:center;font-size:16px;font-weight:500;color:#4b5563;}
 </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="header"><h1>운명 보고서 신청하기</h1><p>궁금한 운세를 선택하고 정보를 입력해주세요.</p></div>
+<div class="container">
+  <h1>이지사주 AI 무료 분석</h1>
+  <form id="sajuForm">
+    <label>이름</label>
+    <input id="name" required placeholder="홍길동">
 
-    <form id="saju-form">
-      <div class="form-group">
-        <label for="product-select">상품 선택</label>
-        <select id="product-select" required>
-          <option value="" disabled selected>분석할 사주 상품을 선택하세요</option>
-          <option value="life_package">종합사주 미니</option>
-          <option value="life_package">종합사주</option>
-          <option value="life_package">재물사주</option>
-          <option value="life_package">연애사주</option>
-        </select>
-      </div>
+    <label>전화번호</label>
+    <input id="phone" type="tel" required placeholder="01012345678">
 
-      <h2 class="section-title">신청자 정보</h2>
-      <div class="form-group"><label>이름</label><input type="text" id="applicant-name" required></div>
-      <div class="form-group"><label>성별</label>
-        <label><input type="radio" name="applicant-gender" value="남성" checked> 남성</label>
-        <label><input type="radio" name="applicant-gender" value="여성"> 여성</label>
-      </div>
-      <div class="form-group"><label>생년월일</label>
-        <div class="input-group">
-          <select id="applicant-year" required></select>
-          <select id="applicant-month" required></select>
-          <select id="applicant-day" required></select>
-        </div>
-      </div>
-      <div class="form-group"><label>출생 시각</label>
-        <div class="input-group">
-          <select id="applicant-hour" required></select>
-          <select id="applicant-minute" required></select>
-        </div>
-      </div>
+    <label>성별</label>
+    <select id="gender" required>
+      <option value="남성">남성</option>
+      <option value="여성">여성</option>
+    </select>
 
-      <h2 class="section-title">연락 정보</h2>
-      <div class="form-group"><label>전화번호</label><input type="tel" id="phone" placeholder="01012345678" required></div>
+    <label>생년월일</label>
+    <div style="display:flex;gap:8px;">
+      <select id="year" required></select>
+      <select id="month" required></select>
+      <select id="day" required></select>
+    </div>
 
-      <div class="term-item"><input type="checkbox" id="agree-privacy"><label for="agree-privacy">[필수] 개인 정보 수집/이용 동의</label></div>
+    <label>출생시각</label>
+    <select id="hour" required>
+      <option value="">--시 선택--</option>
+      <option value="0">자시(23~01)</option>
+      <option value="2">축시(01~03)</option>
+      <option value="4">인시(03~05)</option>
+      <option value="6">묘시(05~07)</option>
+      <option value="8">진시(07~09)</option>
+      <option value="10">사시(09~11)</option>
+      <option value="12">오시(11~13)</option>
+      <option value="14">미시(13~15)</option>
+      <option value="16">신시(15~17)</option>
+      <option value="18">유시(17~19)</option>
+      <option value="20">술시(19~21)</option>
+      <option value="22">해시(21~23)</option>
+    </select>
 
-      <button type="submit" class="submit-btn" disabled>사주 분석 신청하기</button>
-    </form>
-  </div>
+    <label>궁금한 점</label>
+    <input id="question" placeholder="예: 내년 진로운이 궁금해요">
 
-  <div class="loading-overlay" id="loading"><p>운명을 분석 중입니다...</p></div>
+    <div style="margin:12px 0;">
+      <label><input type="checkbox" id="agree"> [필수] 개인정보 수집/이용에 동의</label>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/solarlunar@2.0.4/solarlunar.min.js"></script>
+    <button type="submit" id="sendBtn" disabled>AI 무료 분석 신청</button>
+  </form>
+  <div id="loading">🔮 운명을 분석 중입니다...</div>
+</div>
+
 <script>
-document.addEventListener('DOMContentLoaded',()=>{
-  // 날짜, 시간 셀렉트 채우기
-  const fillDateTime=(p)=>{
-    const y=document.getElementById(`${p}-year`),
-          m=document.getElementById(`${p}-month`),
-          d=document.getElementById(`${p}-day`),
-          h=document.getElementById(`${p}-hour`),
-          min=document.getElementById(`${p}-minute`);
-    const thisYear=new Date().getFullYear();
-    for(let i=thisYear;i>=1930;i--){y.innerHTML+=`<option value="${i}">${i}년</option>`;}
-    for(let i=1;i<=12;i++){m.innerHTML+=`<option value="${i}">${i}월</option>`;}
-    for(let i=1;i<=31;i++){d.innerHTML+=`<option value="${i}">${i}일</option>`;}
-    for(let i=0;i<24;i++){h.innerHTML+=`<option value="${i}">${i}시</option>`;}
-    for(let i=0;i<60;i++){min.innerHTML+=`<option value="${i}">${i}분</option>`;}
+// ====== 기본 날짜 선택 ======
+(function(){
+  const ySel=document.getElementById('year'),
+        mSel=document.getElementById('month'),
+        dSel=document.getElementById('day');
+  const thisY=new Date().getFullYear();
+  for(let i=thisY;i>=1930;i--){ySel.innerHTML+=`<option value="${i}">${i}년</option>`;}
+  for(let i=1;i<=12;i++){mSel.innerHTML+=`<option value="${i}">${i}월</option>`;}
+  for(let i=1;i<=31;i++){dSel.innerHTML+=`<option value="${i}">${i}일</option>`;}
+})();
+
+// ====== 동의 체크 → 버튼 활성화 ======
+const agree=document.getElementById('agree');
+const btn=document.getElementById('sendBtn');
+agree.addEventListener('change',()=>btn.disabled=!agree.checked);
+
+// ====== 폼 제출 ======
+document.getElementById('sajuForm').addEventListener('submit',async(e)=>{
+  e.preventDefault();
+  document.getElementById('loading').style.display='block';
+
+  const name=document.getElementById('name').value;
+  const phone=document.getElementById('phone').value;
+  const gender=document.getElementById('gender').value;
+  const year=+document.getElementById('year').value;
+  const month=+document.getElementById('month').value;
+  const day=+document.getElementById('day').value;
+  const hour=+document.getElementById('hour').value;
+  const question=document.getElementById('question').value;
+
+  // ✅ 만세력 변환
+  const lunar=solarlunar.solar2lunar(year,month,day);
+  const gan=['갑','을','병','정','무','기','경','신','임','계'];
+  const ji=['자','축','인','묘','진','사','오','미','신','유','술','해'];
+  const idx=Math.floor((hour+1)/2)%12;
+  const timeJoo=gan[idx%10]+ji[idx];
+
+  const data={
+    name,phone,gender,
+    yearJoo:lunar.gzYear,
+    monthJoo:lunar.gzMonth,
+    dayJoo:lunar.gzDay,
+    timeJoo,
+    question
   };
-  fillDateTime('applicant');
 
-  // 필수 동의 체크 시 버튼 활성화
-  const privacy=document.getElementById('agree-privacy');
-  const btn=document.querySelector('.submit-btn');
-  privacy.addEventListener('change',()=>{btn.disabled=!privacy.checked;});
+  // ✅ Apps Script URL
+  const url='https://script.google.com/macros/s/AKfycbx7L_12jLzdZEM3xuUKdfsroY8IKmDFcEB-sNKPAsfJQZXwbNUes1DluYPDrgamsRbUqw/exec';
 
-  // 폼 제출
-  const form=document.getElementById('saju-form');
-  form.addEventListener('submit',async(e)=>{
-    e.preventDefault();
-    document.getElementById('loading').classList.add('visible');
-
-    const name=document.getElementById('applicant-name').value;
-    const gender=document.querySelector('input[name="applicant-gender"]:checked').value;
-    const y=document.getElementById('applicant-year').value;
-    const m=document.getElementById('applicant-month').value;
-    const d=document.getElementById('applicant-day').value;
-    const h=document.getElementById('applicant-hour').value;
-    const min=document.getElementById('applicant-minute').value;
-    const phone=document.getElementById('phone').value;
-
-    // 만세력 자동 계산
-    const lunar=solarlunar.solar2lunar(+y,+m,+d);
-    const gan=['갑','을','병','정','무','기','경','신','임','계'];
-    const ji=['자','축','인','묘','진','사','오','미','신','유','술','해'];
-    const idx=Math.floor((+h+1)/2)%12;
-    const timeJoo=gan[idx%10]+ji[idx];
-
-    const data={
-      name,phone,gender,
-      yearJoo:lunar.gzYear,monthJoo:lunar.gzMonth,dayJoo:lunar.gzDay,timeJoo,
-      question:""
-    };
-
-    const url='https://script.google.com/macros/s/AKfycbx7L_12jLzdZEM3xuUKdfsroY8IKmDFcEB-sNKPAsfJQZXwbNUes1DluYPDrgamsRbUqw/exec';
-
-    try{
-      const res=await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(data)});
-      if(!res.ok)throw new Error('서버 오류');
-      window.location.href=url+'?status=ok';
-    }catch(err){
-      alert('전송 중 오류가 발생했습니다.');
-      console.error(err);
-    }finally{
-      document.getElementById('loading').classList.remove('visible');
-    }
-  });
+  try{
+    const res=await fetch(url,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(data)
+    });
+    if(!res.ok) throw new Error('서버 오류');
+    window.location.href=url+'?status=ok';
+  }catch(err){
+    alert('서버 전송 중 오류가 발생했습니다. 잠시 후 재시도 해주세요.');
+    console.error(err);
+  }finally{
+    document.getElementById('loading').style.display='none';
+  }
 });
 </script>
 </body>
