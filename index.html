@@ -79,7 +79,41 @@ button:hover{background:#4338ca;}
   </form>
   <div id="loading">🔮 운명을 분석 중입니다...</div>
 </div>
-
+<!-- ✅ 솔라루나르 대신 직접 천간·지지 계산 스크립트 -->
+<script>
+const TENGAN = ['갑','을','병','정','무','기','경','신','임','계'];
+const JIJI   = ['자','축','인','묘','진','사','오','미','신','유','술','해'];
+function getYearJoo(year){
+  const s=(year-4)%10,b=(year-4)%12;
+  return TENGAN[s]+JIJI[b];
+}
+function getMonthJoo(yearJoo,month){
+  const yIndex=TENGAN.indexOf(yearJoo[0]);
+  const s=((yIndex%5)*2+2+month-1)%10;
+  const b=(month+1)%12;
+  return TENGAN[s]+JIJI[b];
+}
+function getDayJoo(dateStr){
+  const base=new Date(1900,0,1);
+  const input=new Date(dateStr);
+  const diff=Math.floor((input-base)/86400000);
+  const s=(6+diff)%10,b=(0+diff)%12;
+  return TENGAN[(s+10)%10]+JIJI[(b+12)%12];
+}
+function getTimeJoo(dayStem,hour){
+  const base=TENGAN.indexOf(dayStem);
+  const b=Math.floor((hour+1)/2)%12;
+  const s=((base*2)+Math.floor(b/2))%10;
+  return TENGAN[s]+JIJI[b];
+}
+function calcFourPillars(y,m,d,h){
+  const yj=getYearJoo(y);
+  const mj=getMonthJoo(yj,m);
+  const dj=getDayJoo(`${y}-${m}-${d}`);
+  const tj=getTimeJoo(dj[0],h);
+  return {yearJoo:yj,monthJoo:mj,dayJoo:dj,timeJoo:tj};
+}
+</script>
 <script>
 // ====== 기본 날짜 선택 ======
 (function(){
@@ -112,20 +146,21 @@ document.getElementById('sajuForm').addEventListener('submit',async(e)=>{
   const question=document.getElementById('question').value;
 
   // ✅ 만세력 변환
-  const lunar=solarlunar.solar2lunar(year,month,day);
+ // const lunar=solarlunar.solar2lunar(year,month,day);
   const gan=['갑','을','병','정','무','기','경','신','임','계'];
   const ji=['자','축','인','묘','진','사','오','미','신','유','술','해'];
   const idx=Math.floor((hour+1)/2)%12;
   const timeJoo=gan[idx%10]+ji[idx];
 
-  const data={
-    name,phone,gender,
-    yearJoo:lunar.gzYear,
-    monthJoo:lunar.gzMonth,
-    dayJoo:lunar.gzDay,
-    timeJoo,
-    question
-  };
+  // 그리고 아래부분 수정
+const data = {
+  name, phone, gender,
+  yearJoo: pillars.yearJoo,
+  monthJoo: pillars.monthJoo,
+  dayJoo: pillars.dayJoo,
+  timeJoo: pillars.timeJoo,
+  question
+};
 
   // ✅ Apps Script URL
   const url='https://script.google.com/macros/s/AKfycbx7L_12jLzdZEM3xuUKdfsroY8IKmDFcEB-sNKPAsfJQZXwbNUes1DluYPDrgamsRbUqw/exec';
