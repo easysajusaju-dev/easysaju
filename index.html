@@ -272,8 +272,13 @@
         }
       }
 
-      // 모든 검증 통과 → 네이티브 POST로 Apps Script로 이동 (CORS 없음)
-      fortuneForm.submit();
+      // 버튼 비활성화 + 로딩 표시
+      if(actionBtn.disabled) return;
+      actionBtn.disabled = true;
+      loadingOverlay.style.display = "flex";
+
+      // 네이티브 POST로 Apps Script로 이동 (CORS 없음)
+      setTimeout(()=> fortuneForm.submit(), 50);
     }
   </script>
 </body>
