@@ -1,0 +1,249 @@
+/* ===== 인덱스: 투명 상단바(로고+햄버거) ===== */
+.index-topbar{
+  position: fixed; /* 이미지 위에 겹쳐 보이게 */
+  top: 0; left: 0; width: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: calc(env(safe-area-inset-top, 0px) + 12px) 16px 12px;
+  background: transparent; border: 0; box-shadow: none;
+  z-index: 998;
+}
+.topbar-brand{display:flex; align-items:center; gap:8px; text-decoration:none; color:#fff;}
+.topbar-brand img{height:26px; width:auto; filter: drop-shadow(0 1px 1.5px rgba(0,0,0,.35));}
+.topbar-brand span{font-weight:800; font-size:18px; line-height:1; color:#fff; letter-spacing:-0.2px;
+  text-shadow:0 1px 2px rgba(0,0,0,.4);
+}
+
+.topbar-burger{
+  background:none; border:0; outline:0; cursor:pointer;
+  font-size:26px; line-height:1; color:#fff;
+  text-shadow:0 1px 2px rgba(0,0,0,.4);
+  padding:6px 8px; border-radius:8px;
+}
+.topbar-burger:hover,
+.topbar-burger:active{ background: rgba(255,255,255,.08); }
+
+/* 데스크톱에서 조금 더 크게 */
+@media (min-width: 768px){
+  .topbar-brand span{font-size:20px;}
+  .topbar-burger{font-size:28px;}
+}
+@media (min-width: 1024px){
+  .topbar-brand span{font-size:22px;}
+  .topbar-burger{font-size:30px;}
+}
+
+/* 사이드 메뉴가 상단바 위로 오도록 */
+#nav-overlay{ z-index: 999 !important; }
+#side-nav   { z-index: 1000 !important; }
+
+/* (옵션) 밝은 배경에서 쓰고 싶으면 index-topbar에 light 클래스 추가 */
+.index-topbar.light .topbar-brand span,
+.index-topbar.light .topbar-burger{ color:#111; text-shadow:none; }
+.index-topbar.light .topbar-burger:hover{ background: rgba(0,0,0,.06); }
+/* ===== 인덱스: 사이드 메뉴 전체 스타일 ===== */
+#nav-overlay{
+position:fixed; inset:0;
+background:rgba(0,0,0,.5);
+z-index:999;
+opacity:0; visibility:hidden;
+transition:opacity .3s, visibility .3s;
+}
+#nav-overlay.active{ opacity:1; visibility:visible; }
+
+/* 오른쪽 슬라이드 드로어 */
+#side-nav{
+  position: fixed; top: 0;
+  left: auto;           /* 왼쪽 사용 안 함 */
+  right: 0;             /* 오른쪽 고정 */
+  width: 80%; max-width: 320px; height: 100%;
+  background: #fff;
+  transform: translateX(100%);      /* 화면 밖(오른쪽)에서 시작 */
+  transition: transform .3s ease;
+  box-shadow: -2px 0 10px rgba(0,0,0,.12); /* 그림자 방향도 반대로 */
+  z-index: 1000;
+}
+#side-nav.active{ transform: translateX(0); }
+#side-nav.active{ transform:translateX(0); }
+
+/* 헤더(로고+X) */
+#side-nav .nav-header{
+display:flex; align-items:center; justify-content:space-between;
+padding:14px 16px; border-bottom:1px solid #eee;
+}
+#side-nav .logo-in-nav{ display:flex; align-items:center; gap:8px; font-weight:800; color:#222; font-size:18px; }
+#side-nav .logo-in-nav img{ height:24px; width:auto; }
+#close-nav-btn{ font-size:28px; color:#888; text-decoration:none; cursor:pointer; }
+
+/* 메뉴 리스트 */
+#side-nav .nav-menu{
+list-style:none; margin:0; padding:8px 0;
+flex:1; overflow-y:auto;
+}
+#side-nav .nav-menu > li > a,
+#side-nav .nav-menu > li > .accordion-header{
+display:block; padding:16px 18px;
+font-weight:700; font-size:19px; color:#222; text-decoration:none;
+border-bottom:1px solid #f3f3f3;
+}
+
+/* 아코디언 */
+.accordion .accordion-header{ display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+.accordion .arrow{ transition:transform .25s; }
+.accordion.active .arrow{ transform:rotate(180deg); }
+
+.accordion-content{
+max-height:0; overflow:hidden;
+transition:max-height .3s ease;
+background:#fafafa;
+}
+.accordion.active .accordion-content{ max-height:800px; } /* 필요하면 숫자 더 키워도 됨 */
+.accordion-content a{
+display:block; padding:12px 18px 12px 34px;
+font-size:16px; font-weight:400; color:#444; text-decoration:none;
+border-bottom:1px solid #f3f3f3;
+}
+
+/* 푸터 */
+#side-nav .nav-footer{ border-top:1px solid #eee; padding:16px; text-align:center; }
+#side-nav .kakao-btn{
+display:block; background:#FEE500; color:#191919;
+padding:12px; border-radius:8px; font-weight:700; text-decoration:none;
+}
+#side-nav .nav-footer p{ margin:10px 0 0; font-size:12px; color:#888; }
+
+/* 투명 상단바와의 z-index 관계 */
+#nav-overlay{ z-index:999 !important; }
+#side-nav{ z-index:1000 !important; }
+.cover-card-grid{
+display:grid; grid-template-columns:1fr; gap:14px;
+}
+@media (min-width:600px){ .cover-card-grid{ grid-template-columns:repeat(2,1fr); gap:16px; } }
+@media (min-width:1024px){ .cover-card-grid{ grid-template-columns:repeat(3,1fr); gap:18px; } }
+.cover-card{
+position:relative; display:block; border-radius:12px; overflow:hidden;
+aspect-ratio:16/9; text-decoration:none;
+background:#111;
+}
+.cover-card img{
+width:100%; height:100%; object-fit:cover; object-position:center;
+transform:scale(1.02); transition:transform .4s ease;
+}
+.cover-card::after{
+content:""; position:absolute; inset:0;
+background:linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 40%, rgba(0,0,0,0) 70%);
+pointer-events:none;
+}
+.cover-card:hover img{ transform:scale(1.06); }
+
+.cover-caption{
+position:absolute; left:14px; right:14px; bottom:14px; z-index:1;
+color:#fff; display:flex; flex-direction:column; gap:6px;
+text-shadow:0 2px 8px rgba(0,0,0,.45);
+}
+.cover-caption h3{ margin:0; font-size:20px; font-weight:800; letter-spacing:-.2px; }
+.cover-caption p{ margin:0; font-size:14px; opacity:.9; line-height:1.35; }
+
+.cover-cta{
+align-self:flex-start; margin-top:8px;
+display:inline-block; padding:8px 12px; border-radius:10px;
+background:rgba(255,255,255,.92); color:#111; font-weight:700; font-size:13px;
+box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+/* 햄버거/닫기(X) 버튼을 화면 안쪽으로 */
+.index-topbar{
+  padding-right: calc(env(safe-area-inset-right, 0px) + 30px) !important; /* 22~30px 사이 취향대로 */
+}
+.topbar-burger{
+  margin-right: 14px !important;  /* 6~10px 사이로 조정 */
+}
+/* 사이드메뉴 상단(X)도 우측 여백 추가 */
+#side-nav .nav-header{
+  padding: 15px 24px !important; /* (위아래 15, 좌우 22) 20~24로 조절 */
+}
+/* 기본 카드(오버레이) 복구 /
+.cover-card{
+position: relative; display: block;
+border-radius: 12px; overflow: hidden;
+aspect-ratio: 16/9 !important; / 가로형 유지 */
+background: #111;
+}
+.cover-card img{
+display:block; width:100% !important; height:100% !important;
+object-fit: cover !important; object-position: center;
+}
+.cover-card::after{
+content:""; position:absolute; inset:0;
+background: linear-gradient(to top, rgba(0,0,0,.55) 0%, rgba(0,0,0,.25) 40%, rgba(0,0,0,0) 70%);
+pointer-events:none;
+}
+.cover-caption{
+position:absolute !important; left:14px; right:14px; bottom:14px; z-index:1;
+color:#fff; text-shadow:0 2px 8px rgba(0,0,0,.45);
+}
+.cover-caption h3{ margin:0; font-size:20px; font-weight:800; letter-spacing:-.2px; }
+.cover-caption p{ margin:0; font-size:14px; opacity:.9; line-height:1.35; }
+.cover-cta{
+display:inline-block; margin-top:8px; padding:8px 12px;
+border-radius:10px; background:rgba(255,255,255,.92); color:#111; font-weight:700; font-size:13px;
+box-shadow:0 2px 10px rgba(0,0,0,.2);
+}
+.cover-card.split{
+  position: relative;
+  aspect-ratio: auto !important;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.cover-card.split img{
+  width: 100% !important;
+  height: clamp(190px, 38vw, 260px) !important;
+  object-fit: cover !important;
+  object-position: center;
+}
+.cover-card.split::after{ display: none !important; }
+.cover-card.split .cover-caption{
+  position: static !important;
+  display: block !important;
+  padding: 14px 16px 16px;
+  background: #fff;
+  color: #111;
+  text-shadow: none;
+  z-index: 1;
+}
+.cover-card.split .cover-caption h3{ margin: 0 0 4px; font-size: 18px; font-weight: 800; }
+.cover-card.split .cover-caption p{ margin: 0; font-size: 14px; color: #666; }
+.cover-card.split .cover-cta{
+  position: absolute !important;
+  right: 16px;
+  bottom: calc(100% - clamp(190px, 38vw, 260px) + 12px);
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,.95);
+  color: #111;
+  font-weight: 700;
+  font-size: 13px;
+  box-shadow: 0 2px 10px rgba(0,0,0,.2);
+  z-index: 2;
+}
+.cover-card{ position: relative; }
+.cover-card::after{ z-index: 0; }
+/* 카카오 버튼에 아이콘 붙이기(사이드바/인덱스 공통) */
+#side-nav .kakao-btn,
+.kakao-btn{
+  display: inline-flex;               /* 아이콘+텍스트 가로 배치 */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;                           /* 아이콘↔텍스트 간격 (6~12px 조절) */
+}
+
+/* 카카오 말풍선 아이콘 */
+#side-nav .kakao-btn::before,
+.kakao-btn::before{
+  content: "";
+  width: 18px;                        /* 아이콘 크기 (16~22px 조절) */
+  height: 18px;
+  background: url('data:image/svg+xml;utf8,\
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">\
+<path fill="%23191919" d="M12 3c-5.52 0-10 3.58-10 8 0 2.4 1.5 4.53 3.9 5.93L4 21l4.5-2.6c1.1.27 2.28.4 3.5.4 5.52 0 10-3.58 10-8s-4.48-8-10-8z"/>\
+</svg>') no-repeat center/contain;
+}
