@@ -1,0 +1,169 @@
+
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>이지사주 · 수동 PDF 생성기 (GitHub Pages)</title>
+
+  <!-- UI 최소 스타일 -->
+  <style>
+    :root{--w:920px}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Apple SD Gothic Neo,Helvetica,Arial,"Noto Sans KR",sans-serif;margin:0;background:#f6f7fb;color:#111}
+    .wrap{max-width:var(--w);margin:24px auto;padding:20px;background:#fff;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.06)}
+    h1{margin:0 0 12px;font-size:24px}
+    fieldset{border:1px solid #e5e7eb;border-radius:10px;margin:16px 0;padding:14px}
+    legend{padding:0 8px;color:#374151;font-weight:700}
+    label{display:block;margin:10px 0 6px;font-weight:600;color:#374151}
+    input[type="text"],textarea{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}
+    textarea{min-height:140px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row>div{flex:1 1 240px}
+    .hint{color:#6b7280;font-size:12px}
+    .btns{display:flex;gap:10px;margin-top:12px}
+    button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;font-weight:700}
+    .primary{background:#2563eb;color:#fff}
+    .ghost{background:#f3f4f6}
+    .ok{color:#16a34a;font-weight:700}
+    .err{color:#dc2626;font-weight:700}
+    .sep{height:1px;background:#e5e7eb;margin:18px 0}
+  </style>
+  Direct Chat
+
+
+gpt-5-high
+gpt-5-high
+가능합니다. 깃허브 페이지(정적 사이트)에서 jsPDF로 “수동 PDF 생성기”를 만들어 쓰면, AI Studio에서 하던 것과 같은 방식으로 표지/속지/페이지 번호까지 동일하게 만들 수 있습니다. 아래 1개 파일(index.html)만 레포에 넣어 배포하세요. 시트에서 결과를 복사해 붙여넣거나 .txt/.docx로 업로드해도 됩니다. HWP는 브라우저에서 직접 파싱이 어려워 txt/docx로 변환 후 사용을 추천합니다.
+
+사용 전 준비
+
+레포에 아래 경로로 자산을 올리면 자동 사용됩니다. 없으면 화면에서 파일 선택으로 대체 가능합니다.
+assets/cover.png (표지)
+assets/bg.jpg (속지)
+assets/fonts/NotoSansKR-Regular.ttf
+assets/fonts/NotoSansKR-Bold.ttf
+assets/fonts/NotoSansKR-ExtraBold.ttf
+붙여넣기용 전체 코드: index.html
+
+깃허브 Pages에 올려 바로 열 수 있습니다.
+HTML
+
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>이지사주 · 수동 PDF 생성기 (GitHub Pages)</title>
+
+  <!-- UI 최소 스타일 -->
+  <style>
+    :root{--w:920px}
+    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Apple SD Gothic Neo,Helvetica,Arial,"Noto Sans KR",sans-serif;margin:0;background:#f6f7fb;color:#111}
+    .wrap{max-width:var(--w);margin:24px auto;padding:20px;background:#fff;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.06)}
+    h1{margin:0 0 12px;font-size:24px}
+    fieldset{border:1px solid #e5e7eb;border-radius:10px;margin:16px 0;padding:14px}
+    legend{padding:0 8px;color:#374151;font-weight:700}
+    label{display:block;margin:10px 0 6px;font-weight:600;color:#374151}
+    input[type="text"],textarea{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}
+    textarea{min-height:140px}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row>div{flex:1 1 240px}
+    .hint{color:#6b7280;font-size:12px}
+    .btns{display:flex;gap:10px;margin-top:12px}
+    button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;font-weight:700}
+    .primary{background:#2563eb;color:#fff}
+    .ghost{background:#f3f4f6}
+    .ok{color:#16a34a;font-weight:700}
+    .err{color:#dc2626;font-weight:700}
+    .sep{height:1px;background:#e5e7eb;margin:18px 0}
+  </style>
+
+  <!-- jsPDF (UMD) + docx 파서(mammoth) -->
+  <script>
+    // 안전 로더: jsPDF 1차 jsDelivr, 실패 시 cdnjs 폴백
+    (function loadJsPDF(){
+      function add(src, ok, fail){ var s=document.createElement('script'); s.src=src; s.onload=ok; s.onerror=fail||function(){}; document.head.appendChild(s); }
+      add('https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js', function(){}, function(){
+        add('https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js', function(){}, function(){ console.error('jsPDF 로드 실패'); });
+      });
+    })();
+  </script>
+  <script src="https://unpkg.com/mammoth/mammoth.browser.min.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <h1>이지사주 · 수동 PDF 생성기</h1>
+    <div class="hint">- 시트에서 결과를 복사해 붙여넣거나 .txt/.docx 파일 업로드로 내용을 불러오세요.<br>- 표지/속지 이미지는 기본 경로(assets/...)가 있으면 자동 사용됩니다. 없으면 아래에서 파일로 선택하세요.</div>
+
+    <fieldset>
+      <legend>A. 기본 정보</legend>
+      <div class="row">
+        <div><label>이름</label><input id="name" type="text" placeholder="홍길동"></div>
+        <div><label>연락처</label><input id="phone" type="text" placeholder="010-0000-0000"></div>
+        <div><label>성별</label><input id="gender" type="text" placeholder="남/여"></div>
+      </div>
+      <div class="row">
+        <div><label>사주팔자</label><input id="saju" type="text" placeholder="갑오년 을묘월 병자일 정축시 등"></div>
+        <div><label>질문</label><input id="question" type="text" placeholder="올해 사업운은?"></div>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>B. 분석 본문 입력</legend>
+      <label>1) 직접 붙여넣기</label>
+      <textarea id="analysis" placeholder="시트의 결과 텍스트를 그대로 붙여넣으세요."></textarea>
+      <div class="sep"></div>
+      <label>2) 파일 업로드(.txt 또는 .docx)</label>
+      <input id="fileInput" type="file" accept=".txt,.docx">
+      <div class="hint">- .doc(x)는 본문 텍스트만 추출합니다. .hwp는 브라우저에서 지원이 어려워 txt/docx로 변환 후 사용하세요.</div>
+    </fieldset>
+
+        <fieldset>
+      <legend>C. 표지/속지/폰트</legend>
+      <div class="row">
+        <div>
+          <label>표지 이미지 (선택)</label>
+          <input id="coverFile" type="file" accept="image/*">
+          <div class="hint">없으면 assets/cover.png를 자동 시도</div>
+        </div>
+        <div>
+          <label>속지 이미지 (선택)</label>
+          <input id="bgFile" type="file" accept="image/*">
+          <div class="hint">없으면 assets/bg.jpg를 자동 시도</div>
+        </div>
+      </div>
+      <div class="row">
+        <div>
+          <label>한글 폰트(선택) NotoSansKR-Regular.ttf</label>
+          <input id="fontRegular" type="file" accept=".ttf">
+        </div>
+        <div>
+          <label>한글 폰트 NotoSansKR-Bold.ttf</label>
+          <input id="fontBold" type="file" accept=".ttf">
+        </div>
+        <div>
+          <label>한글 폰트 NotoSansKR-ExtraBold.ttf</label>
+          <input id="fontExtraBold" type="file" accept=".ttf">
+        </div>
+      </div>
+      <div class="hint">- 폰트를 선택하지 않으면 레포의 assets/fonts 경로를 자동 시도합니다. 폰트가 없으면 한글이 깨질 수 있습니다.</div>
+    </fieldset>
+
+    <fieldset>
+      <legend>D. 옵션</legend>
+      <div class="row">
+        <div><label><input id="testLong" type="checkbox"> 5페이지 테스트용 긴글 추가</label></div>
+        <div><label>페이지 하단 번호 표시</label><input id="usePageNumber" type="checkbox" checked></div>
+      </div>
+    </fieldset>
+
+    <div class="btns">
+      <button class="primary" id="genBtn">PDF 생성 및 다운로드</button>
+      <button class="ghost" id="clearBtn">입력 초기화</button>
+    </div>
+
+    <div id="log" class="hint" style="margin-top:10px"></div>
+  </div>
+
+  
+  
