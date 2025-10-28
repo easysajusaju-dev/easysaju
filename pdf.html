@@ -1,53 +1,3 @@
-
-<!doctype html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>이지사주 · 수동 PDF 생성기 (GitHub Pages)</title>
-
-  <!-- UI 최소 스타일 -->
-  <style>
-    :root{--w:920px}
-    body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Apple SD Gothic Neo,Helvetica,Arial,"Noto Sans KR",sans-serif;margin:0;background:#f6f7fb;color:#111}
-    .wrap{max-width:var(--w);margin:24px auto;padding:20px;background:#fff;border-radius:12px;box-shadow:0 10px 25px rgba(0,0,0,.06)}
-    h1{margin:0 0 12px;font-size:24px}
-    fieldset{border:1px solid #e5e7eb;border-radius:10px;margin:16px 0;padding:14px}
-    legend{padding:0 8px;color:#374151;font-weight:700}
-    label{display:block;margin:10px 0 6px;font-weight:600;color:#374151}
-    input[type="text"],textarea{width:100%;box-sizing:border-box;padding:10px 12px;border:1px solid #d1d5db;border-radius:8px;font-size:14px}
-    textarea{min-height:140px}
-    .row{display:flex;gap:10px;flex-wrap:wrap}
-    .row>div{flex:1 1 240px}
-    .hint{color:#6b7280;font-size:12px}
-    .btns{display:flex;gap:10px;margin-top:12px}
-    button{cursor:pointer;border:0;border-radius:8px;padding:10px 14px;font-weight:700}
-    .primary{background:#2563eb;color:#fff}
-    .ghost{background:#f3f4f6}
-    .ok{color:#16a34a;font-weight:700}
-    .err{color:#dc2626;font-weight:700}
-    .sep{height:1px;background:#e5e7eb;margin:18px 0}
-  </style>
-  Direct Chat
-
-
-gpt-5-high
-gpt-5-high
-가능합니다. 깃허브 페이지(정적 사이트)에서 jsPDF로 “수동 PDF 생성기”를 만들어 쓰면, AI Studio에서 하던 것과 같은 방식으로 표지/속지/페이지 번호까지 동일하게 만들 수 있습니다. 아래 1개 파일(index.html)만 레포에 넣어 배포하세요. 시트에서 결과를 복사해 붙여넣거나 .txt/.docx로 업로드해도 됩니다. HWP는 브라우저에서 직접 파싱이 어려워 txt/docx로 변환 후 사용을 추천합니다.
-
-사용 전 준비
-
-레포에 아래 경로로 자산을 올리면 자동 사용됩니다. 없으면 화면에서 파일 선택으로 대체 가능합니다.
-assets/cover.png (표지)
-assets/bg.jpg (속지)
-assets/fonts/NotoSansKR-Regular.ttf
-assets/fonts/NotoSansKR-Bold.ttf
-assets/fonts/NotoSansKR-ExtraBold.ttf
-붙여넣기용 전체 코드: index.html
-
-깃허브 Pages에 올려 바로 열 수 있습니다.
-HTML
-
 <!doctype html>
 <html lang="ko">
 <head>
@@ -118,7 +68,7 @@ HTML
       <div class="hint">- .doc(x)는 본문 텍스트만 추출합니다. .hwp는 브라우저에서 지원이 어려워 txt/docx로 변환 후 사용하세요.</div>
     </fieldset>
 
-        <fieldset>
+    <fieldset>
       <legend>C. 표지/속지/폰트</legend>
       <div class="row">
         <div>
@@ -165,5 +115,207 @@ HTML
     <div id="log" class="hint" style="margin-top:10px"></div>
   </div>
 
-  
-  
+  <script>
+    // =============== 유틸 ===============
+    function log(msg, type){ const el=document.getElementById('log'); el.innerHTML = (type==='err' ? '<span class="err">❌ ' : '<span class="ok">✔ ') + msg + '</span>'; }
+    function ab2b64(ab){ let binary=''; const bytes=new Uint8Array(ab); const len=bytes.byteLength; for(let i=0;i<len;i++) binary += String.fromCharCode(bytes[i]); return btoa(binary); }
+    function readAsText(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsText(file,'utf-8'); }); }
+    function readAsArrayBuffer(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsArrayBuffer(file); }); }
+    function readAsDataURL(file){ return new Promise((res,rej)=>{ const r=new FileReader(); r.onload=()=>res(r.result); r.onerror=rej; r.readAsDataURL(file); }); }
+
+    async function fetchOptional(path){ try{ const r=await fetch(path, {cache:'no-store'}); if(!r.ok) return null; return r; }catch(e){ return null; } }
+
+    async function autoLoadFontOrFile(inputEl, fallbackPath){
+      if (inputEl.files && inputEl.files[0]) {
+        const ab = await readAsArrayBuffer(inputEl.files[0]);
+        return ab2b64(ab);
+      }
+      if (fallbackPath) {
+        const r = await fetchOptional(fallbackPath);
+        if (r){ const ab = await r.arrayBuffer(); return ab2b64(ab); }
+      }
+      return null;
+    }
+
+    async function autoLoadImageDataURL(inputEl, fallbackPath){
+      if (inputEl.files && inputEl.files[0]) return await readAsDataURL(inputEl.files[0]);
+      if (fallbackPath){
+        const r = await fetchOptional(fallbackPath);
+        if (r){ const blob=await r.blob(); return await new Promise((res)=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.readAsDataURL(blob); }); }
+      }
+      return null;
+    }
+
+    async function toA4Jpeg(dataUrl, quality=0.92){
+      if (!dataUrl) return null;
+      const W=1654, H=2339; // A4 @144dpi
+      const img = await new Promise((res,rej)=>{ const im=new Image(); im.onload=()=>res(im); im.onerror=()=>rej(new Error('이미지 로딩 실패')); im.src=dataUrl; });
+      const c=document.createElement('canvas'); c.width=W; c.height=H; const ctx=c.getContext('2d');
+      ctx.fillStyle='#fff'; ctx.fillRect(0,0,W,H);
+      const rCanvas=W/H, rImg=img.width/img.height;
+      let dw,dh,dx,dy;
+      if (rImg>rCanvas){ dh=H; dw=Math.round(H*rImg); dx=Math.round((W-dw)/2); dy=0; }
+      else { dw=W; dh=Math.round(W/rImg); dx=0; dy=Math.round((H-dh)/2); }
+      ctx.drawImage(img,dx,dy,dw,dh);
+      return c.toDataURL('image/jpeg', quality);
+    }
+
+    async function readBodyText(){
+      const f=document.getElementById('fileInput').files[0];
+      if (!f) return document.getElementById('analysis').value || '';
+      if (f.name.toLowerCase().endsWith('.txt')) return await readAsText(f);
+      if (f.name.toLowerCase().endsWith('.docx')){
+        const arrayBuffer = await readAsArrayBuffer(f);
+        const result = await window.mammoth.extractRawText({arrayBuffer});
+        return result.value || '';
+      }
+      alert('지원 형식: .txt 또는 .docx (HWP는 txt/docx로 변환 후 사용)');
+      return '';
+    }
+
+    function waitForJsPDF(ms=8000){
+      return new Promise((resolve,reject)=>{
+        const t=Date.now();
+        (function chk(){
+          if (window.jspdf && window.jspdf.jsPDF) return resolve(window.jspdf.jsPDF);
+          if (Date.now()-t>ms) return reject(new Error('jsPDF 로드 실패'));
+          setTimeout(chk,100);
+        })();
+      });
+    }
+
+    // =============== PDF 생성 핵심 ===============
+    async function generatePDF(){
+      try{
+        log('리소스 로딩 중...', 'ok');
+        const jsPDF = await waitForJsPDF();
+
+        // 입력 수집
+        const user = {
+          name: document.getElementById('name').value.trim(),
+          phone: document.getElementById('phone').value.trim(),
+          gender: document.getElementById('gender').value.trim(),
+          saju: document.getElementById('saju').value.trim(),
+          question: document.getElementById('question').value.trim()
+        };
+        let bodyText = await readBodyText();
+        if (!bodyText) bodyText = document.getElementById('analysis').value.trim();
+        if (!bodyText) return log('본문이 비어있습니다. 붙여넣기 또는 파일 업로드를 확인하세요.', 'err');
+
+        // 이미지/폰트 로딩(파일 선택 > fallback 경로)
+        const coverDataUrl = await autoLoadImageDataURL(document.getElementById('coverFile'), 'assets/cover.png');
+        const bgDataUrl    = await autoLoadImageDataURL(document.getElementById('bgFile'),    'assets/bg.jpg');
+        const regularB64   = await autoLoadFontOrFile(document.getElementById('fontRegular'),  'assets/fonts/NotoSansKR-Regular.ttf');
+        const boldB64      = await autoLoadFontOrFile(document.getElementById('fontBold'),     'assets/fonts/NotoSansKR-Bold.ttf');
+        const extraB64     = await autoLoadFontOrFile(document.getElementById('fontExtraBold'),'assets/fonts/NotoSansKR-ExtraBold.ttf');
+
+        // 호환성 위해 A4 JPEG 정규화
+        const coverJpg = coverDataUrl ? await toA4Jpeg(coverDataUrl) : null;
+        const bgJpg    = bgDataUrl    ? await toA4Jpeg(bgDataUrl)    : null;
+
+        // jsPDF 문서
+        const doc = new jsPDF('p','mm','a4');
+        const docWidth  = doc.internal.pageSize.getWidth();
+        const docHeight = doc.internal.pageSize.getHeight();
+        const margin = 22.5;
+        const lineHeight = 6;
+        const textWidth = docWidth - margin*2;
+
+        // 폰트 등록
+        if (regularB64){ doc.addFileToVFS('NotoSansKR-Regular.ttf', regularB64); doc.addFont('NotoSansKR-Regular.ttf','NotoSansKR','normal'); }
+        if (boldB64){    doc.addFileToVFS('NotoSansKR-Bold.ttf',    boldB64);    doc.addFont('NotoSansKR-Bold.ttf','NotoSansKR','bold');}
+        if (extraB64){   doc.addFileToVFS('NotoSansKR-ExtraBold.ttf',extraB64);  doc.addFont('NotoSansKR-ExtraBold.ttf','NotoSansKR','extrabold');}
+        doc.setFont(regularB64 ? 'NotoSansKR' : 'helvetica', 'normal');
+
+        // 표지
+        if (coverJpg) {
+          doc.addImage(coverJpg, 'JPEG', 0, 0, docWidth, docHeight);
+          if (extraB64) doc.setFont('NotoSansKR','extrabold'); else if (boldB64) doc.setFont('NotoSansKR','bold');
+          doc.setTextColor('#B8860B'); doc.setFontSize(26);
+          doc.text(`${user.name || ''}님`, docWidth/2, docHeight-60, { align:'center' });
+        }
+
+        // 내용 페이지 프레임(배경/페이지)
+        let y = margin, pageNo = 2;
+        const usePageNumber = document.getElementById('usePageNumber').checked;
+        function addPageFrame(){
+          doc.addPage();
+          if (bgJpg) doc.addImage(bgJpg, 'JPEG', 0, 0, docWidth, docHeight);
+          doc.setFont(regularB64 ? 'NotoSansKR' : 'helvetica', 'normal');
+          doc.setTextColor('#333'); doc.setFontSize(10);
+          if (usePageNumber) doc.text(`Page ${pageNo}`, docWidth - margin, docHeight - 10, { align:'right' });
+          pageNo++; y = margin;
+        }
+        addPageFrame();
+
+        // 타이틀/일자
+        if (boldB64) doc.setFont('NotoSansKR','bold');
+        doc.setFontSize(18);
+        doc.text('이지사주 분석 결과', docWidth/2, y, { align:'center' }); y += 8;
+        doc.setFont(regularB64 ? 'NotoSansKR' : 'helvetica', 'normal');
+        doc.setFontSize(10);
+        const dateStr = new Date().toLocaleString('ko-KR',{ timeZone:'Asia/Seoul' });
+        doc.text(`분석일: ${dateStr}`, docWidth/2, y, { align:'center' }); y += 6;
+
+        // 기본 정보 블록
+        doc.setFontSize(11);
+        const info = [
+          `이름: ${user.name || ''}`,
+          `연락처: ${user.phone || ''}`,
+          `성별: ${user.gender || ''}`,
+          `사주팔자: ${user.saju || ''}`,
+          `질문: ${user.question || ''}`
+        ];
+        for (const line of info){
+          if (y + lineHeight > docHeight - margin) addPageFrame();
+          doc.text(line, margin, y); y += lineHeight;
+        }
+        y += 4;
+
+        // 본문
+        if (boldB64) doc.setFont('NotoSansKR','bold');
+        doc.setFontSize(14);
+        if (y + lineHeight > docHeight - margin) addPageFrame();
+        doc.text('사주 분석 총평', margin, y); y += 8;
+
+        doc.setFont(regularB64 ? 'NotoSansKR' : 'helvetica', 'normal');
+        doc.setFontSize(12);
+        const lines = doc.splitTextToSize(bodyText, textWidth);
+        for (const ln of lines){
+          if (y + lineHeight > docHeight - margin) addPageFrame();
+          doc.text(ln, margin, y); y += lineHeight;
+        }
+
+        // 5페이지 테스트
+        if (document.getElementById('testLong').checked){
+          y += 6;
+          const lorem='Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus at mi ac nisl viverra cursus. Praesent non magna velit. ';
+          let long=''; for (let i=0;i<120;i++) long += lorem;
+          const more = doc.splitTextToSize(long, textWidth);
+          for (const ln of more){
+            if (y + lineHeight > docHeight - margin) addPageFrame();
+            doc.text(ln, margin, y); y += lineHeight;
+          }
+        }
+
+        // 다운로드
+        const safeDate = new Date().toISOString().slice(0,16).replace('T',' ').replace(/:/g,'-');
+        const filename = `[${user.name || '고객'}] 사주분석 결과 (${safeDate}).pdf`;
+        doc.save(filename);
+        log('PDF 생성 완료! 브라우저에서 다운로드 되었습니다.', 'ok');
+      }catch(e){
+        console.error(e);
+        log('PDF 생성 중 오류: ' + e.message, 'err');
+      }
+    }
+
+    // =============== 이벤트 ===============
+    document.getElementById('genBtn').addEventListener('click', generatePDF);
+    document.getElementById('clearBtn').addEventListener('click', ()=>{
+      ['name','phone','gender','saju','question','analysis'].forEach(id=>document.getElementById(id).value='');
+      ['fileInput','coverFile','bgFile','fontRegular','fontBold','fontExtraBold'].forEach(id=>document.getElementById(id).value=null);
+      log('입력을 초기화했습니다.','ok');
+    });
+  </script>
+</body>
+</html>
