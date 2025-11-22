@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>이지사주 PDF 생성기</title>
+
+  <style>
+    body{font-family:'Noto Sans KR',sans-serif;background:#f6f7fb;margin:0;padding:0}
+    .wrap{max-width:900px;margin:24px auto;padding:24px;background:#fff;border-radius:16px;box-shadow:0 2px 10px rgba(0,0,0,.08)}
+    h1{margin:0 0 20px;font-size:26px}
+    label{font-weight:600;margin-top:10px;display:block}
+    textarea,input{width:100%;padding:10px;border:1px solid #ccc;border-radius:8px;font-size:14px}
+    textarea{min-height:150px}
+    button{padding:12px 16px;border:0;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
+    .primary{background:#2563eb;color:white;margin-top:20px;width:100%}
+    .row{display:flex;gap:10px;flex-wrap:wrap}
+    .row>div{flex:1 1 200px}
+  </style>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+<div class="wrap">
+  <h1>이지사주 — HTML 기반 PDF 생성기</h1>
+
+  <label>이름</label>
+  <input id="name" placeholder="홍길동"/>
+
+  <label>출력할 사주 분석 텍스트</label>
+  <textarea id="text" placeholder="GPT가 생성한 사주 분석 텍스트를 그대로 붙여넣으세요."></textarea>
+
+  <label>표지 이미지 (선택)</label>
+  <input id="cover" type="file" accept="image/*"/>
+
+  <label>속지 이미지 (선택)</label>
+  <input id="inner" type="file" accept="image/*"/>
+
+  <button class="primary" onclick="generate()">PDF 생성</button>
+</div>
+
+<script>
+async function readFileAsDataURL(file){
+  return new Promise((res)=>{ const fr=new FileReader(); fr.onload=()=>res(fr.result); fr.readAsDataURL(file); });
+}
+
+async function generate(){
+  const { jsPDF } = window.jspdf;
+  const name = document.getElementById("name").value || "고객";
+  const bodyText = document.getElementById("text").value.trim();
+
+  if(!bodyText){ alert("본문 내용이 없습니다."); return; }
+
+  let coverImg=null, innerImg=null;
+  const coverFile=document.getElementById('cover').files[0];
+  const innerFile=document.getElementById('inner').files[0];
+
+  if(coverFile) coverImg = await readFileAsDataURL(coverFile);
+  if(innerFile) innerImg = await readFileAsDataURL(innerFile);
+
+  const doc=new jsPDF('p','mm','a4');
+  const W=210, H=297;
+  const margin=20;
+  const textWidth=W-(margin*2);
+  let y=margin;
+
+  // 표지
+  if(coverImg) doc.addImage(coverImg,'JPEG',0,0,W,H);
+  doc.setFontSize(26).setTextColor("#111");
+  doc.text(`${name}님 사주분석`, W/2, H-40, {align:'center'});
+
+  // 내용 페이지 시작
+  doc.addPage();
+  if(innerImg) doc.addImage(innerImg,'JPEG',0,0,W,H);
+
+  doc.setFontSize(12).setTextColor("#222");
+  y=margin;
+
+  const lines=doc.splitTextToSize(bodyText,textWidth);
+  for(const line of lines){
+    if(y+8>H-margin){
+      doc.addPage();
+      if(innerImg) doc.addImage(innerImg,'JPEG',0,0,W,H);
+      y=margin;
+    }
+    doc.text(line, margin, y);
+    y+=7;
+  }
+
+  const filename=`${name}_사주보고서.pdf`;
+  doc.save(filename);
+}
+</script>
+</body>
+</html>
