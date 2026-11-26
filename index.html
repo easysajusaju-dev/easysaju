@@ -1,103 +1,446 @@
-
 <!DOCTYPE html>
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>서비스 종료 및 잠정 중단 안내</title>
+    
+    <!-- SEO & 리브랜딩 메타태그 (구글, 네이버, AI 검색 최적화) -->
+    <title>사주문답 궁(宮) | 이지사주 공식 리브랜딩 티저 & VIP 사전예약</title>
+    <meta name="description" content="이지사주가 조선 왕실 관상감 비전과 최첨단 AI 실시간 음성 해단을 탑재한 프리미엄 명리 브랜드 '사주문답 궁(宮)'으로 전면 리브랜딩됩니다. 지금 얼리액세스 베타 무료 체험 및 VIP 70% 할인 사전예약 혜택을 확인하세요.">
+    <meta name="keywords" content="이지사주, 사주문답, 사주문답 궁, 이지사주 리브랜딩, 왕실 관상감 비전, 해원선생, AI 사주 음성 상담, 정통 사주풀이">
+    <link rel="canonical" href="https://www.easysaju.kr/">
+    <meta name="robots" content="index, follow">
+
+    <!-- 오픈그래프 (소셜 공유 & 카카오톡 미리보기) -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="이지사주, 그 이상의 품격으로 돌아옵니다 — 사주문답 궁(宮)">
+    <meta property="og:description" content="10만 고객이 사랑해 주신 이지사주가 조선 왕실 관상감 비전과 1:1 실시간 AI 음성 해단을 품은 '사주문답 궁'으로 새롭게 태어납니다.">
+    <meta property="og:image" content="https://www.easysaju.kr/images/share.png">
+    <meta property="og:url" content="https://www.easysaju.kr/">
+
+    <!-- 파비콘 -->
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-icon-180x180.png">
+    <link rel="shortcut icon" href="images/favicon.ico">
+
+    <!-- 구조화 데이터 (JSON-LD: 구글·AI 엔진에 이지사주 → 사주문답 궁 공식 승계 명시) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "사주문답 궁(宮)",
+      "alternateName": ["이지사주", "EasySaju", "사주문답", "지은각", "조선왕실 관상감 사주문답 궁"],
+      "url": "https://www.easysaju.kr",
+      "logo": "https://www.easysaju.kr/images/logo.png",
+      "sameAs": [
+        "https://jieungak-report.pages.dev",
+        "https://www.instagram.com/easysaju",
+        "https://www.youtube.com/@easysaju"
+      ],
+      "description": "이지사주가 조선 왕실 관상감(觀象監) 국초 비전과 실시간 AI 음성 대화 해단을 탑재한 '사주문답 궁(宮)'으로 전면 리브랜딩되었습니다."
+    }
+    </script>
+
+    <!-- Tailwind CSS (CDN) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        palace: {
+                            950: '#080a0f',
+                            900: '#0c0f18',
+                            800: '#141926',
+                            700: '#1e2538',
+                        },
+                        gold: {
+                            300: '#f5d590',
+                            400: '#dfb76c',
+                            500: '#c5a059',
+                            600: '#a6823c',
+                            700: '#7d6129',
+                        },
+                        amberGlow: '#d97706',
+                    },
+                    fontFamily: {
+                        serif: ['"Noto Serif KR"', 'serif'],
+                        sans: ['"Pretendard"', '-apple-system', 'BlinkMacSystemFont', 'system-ui', 'Roboto', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- 구글 폰트: Noto Serif KR & 폰트어썸 아이콘 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&family=Pretendard:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
     <style>
         body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-            background-color: #fcfcfc;
-            color: #333;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
+            font-family: 'Pretendard', sans-serif;
+            background-color: #080a0f;
+            color: #f1f5f9;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(197, 160, 89, 0.15) 0%, transparent 60%),
+                radial-gradient(circle at 10% 30%, rgba(30, 41, 59, 0.4) 0%, transparent 50%),
+                radial-gradient(circle at 90% 70%, rgba(197, 160, 89, 0.08) 0%, transparent 50%);
         }
-        .container {
-            max-width: 600px;
-            padding: 40px;
-            background: white;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-            border-radius: 12px;
-            border-top: 5px solid #a38973;
+        .font-hanji {
+            font-family: 'Noto Serif KR', serif;
         }
-        .logo {
-            font-size: 24px;
-            font-weight: bold;
-            color: #a38973;
-            margin-bottom: 30px;
-            letter-spacing: 1px;
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #fff3d4 0%, #dfb76c 50%, #c5a059 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
-        h1 {
-            font-size: 22px;
-            margin-bottom: 20px;
-            color: #444;
-            line-height: 1.4;
+        .royal-border {
+            border: 1px solid rgba(223, 183, 108, 0.25);
+            box-shadow: 0 0 25px rgba(197, 160, 89, 0.08);
         }
-        .content {
-            font-size: 15px;
-            line-height: 1.8;
-            color: #666;
-            margin-bottom: 30px;
+        .royal-card-glow {
+            transition: all 0.3s ease;
         }
-        .divider {
-            width: 40px;
-            height: 1px;
-            background: #ddd;
-            margin: 25px auto;
+        .royal-card-glow:hover {
+            border-color: rgba(223, 183, 108, 0.5);
+            box-shadow: 0 0 35px rgba(197, 160, 89, 0.18);
+            transform: translateY(-2px);
         }
-        .footer {
-            font-size: 13px;
-            color: #999;
+        .gold-btn {
+            background: linear-gradient(135deg, #dfb76c 0%, #c5a059 100%);
+            color: #080a0f;
+            font-weight: 700;
+            box-shadow: 0 4px 20px rgba(197, 160, 89, 0.3);
+            transition: all 0.25s ease;
         }
-        .accent {
-            color: #a38973;
-            font-weight: 600;
+        .gold-btn:hover {
+            background: linear-gradient(135deg, #f5d590 0%, #dfb76c 100%);
+            box-shadow: 0 6px 28px rgba(197, 160, 89, 0.5);
+            transform: translateY(-2px);
         }
-        .button {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 10px 20px;
-            font-size: 14px;
-            color: #a38973;
-            text-decoration: none;
-            border: 1px solid #a38973;
-            border-radius: 4px;
-            transition: all 0.3s;
+        .gold-badge {
+            background: rgba(197, 160, 89, 0.12);
+            border: 1px solid rgba(223, 183, 108, 0.35);
+            color: #f5d590;
         }
-        .button:hover {
-            background: #a38973;
-            color: white;
+        .royal-seal {
+            border: 2px solid #b91c1c;
+            color: #ef4444;
+            letter-spacing: 2px;
+            font-family: 'Noto Serif KR', serif;
+        }
+        @keyframes pulseGlow {
+            0%, 100% { opacity: 0.4; }
+            50% { opacity: 0.8; }
+        }
+        .animate-glow {
+            animation: pulseGlow 4s infinite ease-in-out;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <div class="logo">THANK YOU</div>
-        <h1>그동안 보내주신 따뜻한 성원에<br>진심으로 감사드립니다.</h1>
-        <div class="content">
-            안녕하세요.<br>
-            그동안 저희 서비스를 아껴주시고 찾아주신 모든 분들께<br>
-            깊은 감사의 인사를 올립니다.<br><br>
-            부득이한 사정으로 인하여 <span class="accent">2026년 2월 8일</span>부로<br>
-            서비스 운영을 <span class="accent">잠정 중단</span>하게 되었습니다.<br><br>
-            함께했던 소중한 시간들을 가슴 깊이 간직하겠습니다.<br>
-            비록 지금은 잠시 멈추어가지만, 더 좋은 모습으로 다시 뵙게 될<br>
-            그날을 기약하며 아쉬운 마음을 대신합니다.<br><br>
-            보내주신 큰 사랑 절대 잊지 않겠습니다.
+<body class="min-h-screen flex flex-col justify-between selection:bg-gold-500 selection:text-black">
+
+    <!-- 상단 공식 리브랜딩 안내 띠배너 -->
+    <div class="bg-gradient-to-r from-palace-950 via-palace-800 to-palace-950 border-b border-gold-500/20 py-2.5 px-4 text-center">
+        <div class="max-w-4xl mx-auto flex items-center justify-center gap-2 text-xs md:text-sm text-gold-300">
+            <span class="inline-flex items-center justify-center w-5 h-5 rounded-full bg-gold-500/20 text-gold-400 text-[11px] font-bold">官</span>
+            <span><strong>[공식 안내]</strong> '이지사주'가 <strong>『사주문답 궁(宮)』</strong>으로 새롭게 탄생합니다.</span>
         </div>
-        <div class="divider"></div>
-        <div class="footer">
-            운영 종료와 관련된 문의사항은 아래 연락처로 부탁드립니다.<br>
-            CS: [이메일: easysaju.saju@gmail.com]<br><br>
-        </div>
-           <!-- (3) 항상 보이는 저작권 정보 -->
-        <p class="copyright">&copy; 2025 이지사주. All rights reserved.</p>
     </div>
+
+    <!-- 네비게이션 헤더 -->
+    <header class="max-w-5xl w-full mx-auto px-6 py-6 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-lg bg-palace-800 border border-gold-500/40 flex items-center justify-center shadow-lg shadow-gold-500/10">
+                <span class="font-hanji font-black text-xl text-gold-400">宮</span>
+            </div>
+            <div>
+                <div class="font-hanji font-bold text-lg md:text-xl tracking-wider gold-gradient-text">사주문답 궁(宮)</div>
+                <div class="text-[10px] text-slate-400 tracking-widest uppercase">舊 이지사주 공식 리브랜딩</div>
+            </div>
+        </div>
+        <div class="flex items-center gap-3">
+            <a href="https://jieungak-report.pages.dev/?utm_source=easysaju_teaser&utm_medium=nav_beta" target="_blank" rel="noopener noreferrer" class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold gold-badge hover:bg-gold-500/25 transition">
+                <span>정식 베타 즉시 체험</span>
+                <i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i>
+            </a>
+            <a href="#pre-register" class="px-4 py-1.5 rounded-full text-xs font-bold gold-btn">
+                VIP 사전 알림
+            </a>
+        </div>
+    </header>
+
+    <!-- 메인 히어로 섹션 -->
+    <main class="max-w-4xl mx-auto px-6 pt-8 pb-16 text-center">
+        <!-- 인장 뱃지 -->
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full gold-badge text-xs font-medium mb-8">
+            <span class="w-2 h-2 rounded-full bg-gold-400 animate-ping"></span>
+            <span>조선 왕실 관상감(觀象監) 국초 비전 & AI 실시간 음성 해단</span>
+        </div>
+
+        <!-- 메인 헤드카피 -->
+        <h1 class="font-hanji font-black text-3xl sm:text-4xl md:text-5xl leading-tight md:leading-snug mb-6">
+            그동안 <span class="text-slate-400 line-through decoration-gold-500/60 decoration-2">이지사주</span>를 아껴주신<br class="hidden sm:block">
+            10만 고객님께 고개 숙여 감사드립니다.
+        </h1>
+
+        <!-- 서브 카피 -->
+        <p class="font-serif text-lg sm:text-2xl text-gold-300 font-semibold mb-6">
+            "쉬운 사주를 넘어, 가장 존엄한 당신의 천명(天命)을 마주하다."
+        </p>
+
+        <p class="max-w-2xl mx-auto text-sm sm:text-base text-slate-300 font-light leading-relaxed mb-10">
+            지난 1년간의 연구 끝에 마침내 완성되었습니다.<br class="hidden sm:block">
+            조선 왕실 관상감의 600년 비전과 국내 최초 40년 명리 거장 <strong>해원(海園) 선생</strong>의 
+            <strong>1:1 실시간 AI 음성 상담소</strong>를 품고, <strong class="text-gold-300">『사주문답 궁(宮)』</strong>이라는 이름으로 다시 찾아옵니다.
+        </p>
+
+        <!-- CTA 버튼 그룹 -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-16">
+            <a href="#pre-register" class="w-full sm:w-auto px-8 py-4 rounded-xl gold-btn text-base font-bold flex items-center justify-center gap-2">
+                <i class="fa-solid fa-gift text-sm"></i>
+                <span>VIP 사전예약 신청 (70% 할인 + 음성 30분 무료)</span>
+            </a>
+            <a href="https://jieungak-report.pages.dev/?utm_source=easysaju_teaser&utm_medium=hero_early" target="_blank" rel="noopener noreferrer" class="w-full sm:w-auto px-7 py-4 rounded-xl bg-palace-800 hover:bg-palace-700 border border-gold-500/30 text-gold-300 text-base font-semibold flex items-center justify-center gap-2 transition royal-card-glow">
+                <span>기다리지 않고 지금 즉시 체험하기</span>
+                <i class="fa-solid fa-arrow-right text-xs"></i>
+            </a>
+        </div>
+
+        <!-- 리브랜딩 3대 핵심 혁신 카드 -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 text-left mb-16">
+            <!-- 카드 1 -->
+            <div class="p-6 rounded-2xl bg-palace-900 royal-border royal-card-glow flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 mb-4 text-lg">
+                        <i class="fa-solid fa-microphone-lines"></i>
+                    </div>
+                    <div class="text-xs text-gold-400 font-mono font-bold mb-1">INNOVATION 01</div>
+                    <h3 class="font-hanji font-bold text-lg text-white mb-2">실시간 1:1 음성 대화 해단</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        글로 읽는 사주는 끝났습니다. 40년 명리 거장 '해원 선생'의 온화하고 깊이 있는 육성으로 내 고민을 실시간 문답하며 마음의 매듭을 풉니다.
+                    </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-gold-400/90 font-medium flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-[10px]"></i>
+                    <span>지연 시간 없는 즉각 음성 대화 기술</span>
+                </div>
+            </div>
+
+            <!-- 카드 2 -->
+            <div class="p-6 rounded-2xl bg-palace-900 royal-border royal-card-glow flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 mb-4 text-lg">
+                        <i class="fa-solid fa-scroll"></i>
+                    </div>
+                    <div class="text-xs text-gold-400 font-mono font-bold mb-1">INNOVATION 02</div>
+                    <h3 class="font-hanji font-bold text-lg text-white mb-2">조선 왕실 관상감 국초 비전</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        조선 국왕과 대신들의 천명을 살피던 왕실 관상감의 원전 비전을 복원하여, 나의 타고난 기운과 10년 주기 평생대운을 오차 없이 정밀 해독합니다.
+                    </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-gold-400/90 font-medium flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-[10px]"></i>
+                    <span>천간·지지·격국·용희신 완벽 산출</span>
+                </div>
+            </div>
+
+            <!-- 카드 3 -->
+            <div class="p-6 rounded-2xl bg-palace-900 royal-border royal-card-glow flex flex-col justify-between">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-gold-500/10 border border-gold-500/30 flex items-center justify-center text-gold-400 mb-4 text-lg">
+                        <i class="fa-solid fa-book-bookmark"></i>
+                    </div>
+                    <div class="text-xs text-gold-400 font-mono font-bold mb-1">INNOVATION 03</div>
+                    <h3 class="font-hanji font-bold text-lg text-white mb-2">40페이지 정밀 옥책 감정서</h3>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        가벼운 요약본이 아닙니다. 재물, 사업, 연애, 배우자 인연, 건강, 월별 세운까지 오직 나만을 위해 제본된 40페이지 분량의 명리 대작을 제공합니다.
+                    </p>
+                </div>
+                <div class="mt-4 pt-3 border-t border-slate-800 text-[11px] text-gold-400/90 font-medium flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-[10px]"></i>
+                    <span>소장용 평생 천명 비서(秘書)</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 이지사주 vs 사주문답 궁 비교 표 -->
+        <div class="p-6 md:p-8 rounded-2xl bg-palace-900/80 royal-border text-left mb-16">
+            <h2 class="font-hanji font-bold text-xl md:text-2xl text-white mb-6 text-center">
+                어떻게 달라지나요?
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full text-xs md:text-sm">
+                    <thead>
+                        <tr class="border-b border-slate-800 text-slate-400">
+                            <th class="py-3 px-4 text-left font-medium">구분</th>
+                            <th class="py-3 px-4 text-left font-medium text-slate-400">구(舊) 이지사주</th>
+                            <th class="py-3 px-4 text-left font-bold text-gold-300">신(新) 사주문답 궁(宮)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800/60">
+                        <tr>
+                            <td class="py-3.5 px-4 font-semibold text-slate-300">상담 방식</td>
+                            <td class="py-3.5 px-4 text-slate-400">정적 텍스트 및 기본 리포트</td>
+                            <td class="py-3.5 px-4 text-gold-300 font-bold">1:1 실시간 AI 음성 대화 해단 + 즉시 문답</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3.5 px-4 font-semibold text-slate-300">해석 깊이</td>
+                            <td class="py-3.5 px-4 text-slate-400">일반 현대 명리학 기초 요약</td>
+                            <td class="py-3.5 px-4 text-gold-300 font-bold">조선 왕실 관상감 비전 + 심층 격국·용신 분석</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3.5 px-4 font-semibold text-slate-300">리포트 분량</td>
+                            <td class="py-3.5 px-4 text-slate-400">5~10페이지 내외 요약</td>
+                            <td class="py-3.5 px-4 text-gold-300 font-bold">40페이지 이상 정밀 옥책 감정서 제본</td>
+                        </tr>
+                        <tr>
+                            <td class="py-3.5 px-4 font-semibold text-slate-300">맞춤 솔루션</td>
+                            <td class="py-3.5 px-4 text-slate-400">단방향 운세 확인</td>
+                            <td class="py-3.5 px-4 text-gold-300 font-bold">개인 천명에 따른 개운(開運) 비책 처방</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- VIP 사전알림 등록 섹션 -->
+        <section id="pre-register" class="p-8 md:p-12 rounded-3xl bg-gradient-to-b from-palace-800 to-palace-950 royal-border text-center relative overflow-hidden mb-16">
+            <div class="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-96 bg-gold-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="inline-block px-3 py-1 rounded-full gold-badge text-xs font-bold mb-4">
+                VIP 얼리버드 특별 혜택
+            </div>
+
+            <h2 class="font-hanji font-black text-2xl md:text-3xl text-white mb-3">
+                사주문답 궁 그랜드 오픈 VIP 사전예약
+            </h2>
+
+            <p class="text-xs md:text-sm text-slate-300 max-w-lg mx-auto mb-8 leading-relaxed">
+                정식 출시 소식을 가장 먼저 받아보시고, 오직 이지사주 가족분들께만 드리는 <strong>70% 런칭 할인 쿠폰</strong>과 <strong>해원 선생 실시간 음성 상담 30분 무료 이용권</strong>을 확보하세요.
+            </p>
+
+            <form id="leadForm" onsubmit="handlePreRegister(event)" class="max-w-md mx-auto space-y-3.5 text-left">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">성함 (또는 닉네임)</label>
+                    <input type="text" id="leadName" required placeholder="홍길동" class="w-full bg-palace-900 border border-slate-700 focus:border-gold-400 rounded-xl px-4 py-3 text-white text-sm outline-none transition">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">휴대폰 번호 (알림톡 수신용)</label>
+                    <input type="tel" id="leadPhone" required placeholder="010-1234-5678" pattern="[0-9]{2,3}-?[0-9]{3,4}-?[0-9]{4}" class="w-full bg-palace-900 border border-slate-700 focus:border-gold-400 rounded-xl px-4 py-3 text-white text-sm outline-none transition">
+                </div>
+                
+                <div class="flex items-start gap-2 pt-1 text-xs text-slate-400">
+                    <input type="checkbox" id="leadAgree" required checked class="mt-0.5 rounded accent-gold-500">
+                    <label for="leadAgree" class="cursor-pointer">
+                        [필수] 사주문답 궁 런칭 알림 및 VIP 혜택 안내를 위한 개인정보 수집·이용에 동의합니다.
+                    </label>
+                </div>
+
+                <button type="submit" id="submitBtn" class="w-full py-4 rounded-xl gold-btn text-base font-bold flex items-center justify-center gap-2 mt-4">
+                    <span>VIP 사전예약 혜택 신청하기</span>
+                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </form>
+
+            <div id="formSuccess" class="hidden max-w-md mx-auto p-6 rounded-2xl bg-gold-500/10 border border-gold-400/40 text-center">
+                <div class="w-12 h-12 rounded-full bg-gold-500/20 text-gold-400 flex items-center justify-center mx-auto mb-3 text-xl">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h3 class="font-hanji font-bold text-lg text-white mb-1">VIP 사전예약이 완료되었습니다!</h3>
+                <p class="text-xs text-slate-300 leading-relaxed mb-4">
+                    정식 그랜드 오픈 당일 기재해주신 번호로 <strong>[70% VIP 할인권 + 음성 상담 30분 무료권]</strong>이 우선 발송됩니다.
+                </p>
+                <a href="https://jieungak-report.pages.dev/?utm_source=easysaju_teaser&utm_medium=form_success" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl gold-btn text-xs font-bold">
+                    <span>지금 바로 정식 베타 이용해보기</span>
+                    <i class="fa-solid fa-arrow-up-right-from-square"></i>
+                </a>
+            </div>
+        </section>
+
+        <!-- 지금 바로 이용 안내 배너 -->
+        <div class="p-6 rounded-2xl bg-palace-900/60 border border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-left">
+            <div>
+                <div class="font-semibold text-white text-sm md:text-base mb-1">
+                    기다리지 않고 오늘 바로 사주를 풀고 싶으신가요?
+                </div>
+                <div class="text-xs text-slate-400">
+                    현재 운영 중인 '사주문답 궁' 공식 얼리액세스 베타에서 동일한 풀이와 해원 선생 음성 상담을 지금 이용하실 수 있습니다.
+                </div>
+            </div>
+            <a href="https://jieungak-report.pages.dev/?utm_source=easysaju_teaser&utm_medium=bottom_banner" target="_blank" rel="noopener noreferrer" class="shrink-0 px-5 py-2.5 rounded-xl bg-palace-800 hover:bg-palace-700 border border-gold-500/40 text-gold-300 text-xs font-bold transition flex items-center gap-1.5">
+                <span>공식 베타 즉시 입장</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+        </div>
+    </main>
+
+    <!-- 푸터 (사업자 정보 & 저작권) -->
+    <footer class="border-t border-slate-800/80 bg-palace-950 py-10 px-6 text-center text-xs text-slate-500">
+        <div class="max-w-4xl mx-auto space-y-4">
+            <div class="flex items-center justify-center gap-4 text-slate-400 text-xs">
+                <a href="https://jieungak-report.pages.dev/terms" target="_blank" rel="noopener noreferrer" class="hover:text-gold-300 transition">이용약관</a>
+                <span>·</span>
+                <a href="https://jieungak-report.pages.dev/privacy" target="_blank" rel="noopener noreferrer" class="hover:text-gold-300 transition">개인정보처리방침</a>
+                <span>·</span>
+                <a href="mailto:easysaju.saju@gmail.com" class="hover:text-gold-300 transition">고객문의: easysaju.saju@gmail.com</a>
+            </div>
+
+            <div class="space-y-1 text-[11px] text-slate-500 leading-relaxed">
+                <p>상호명: 이지사주 (사주문답 궁) | 대표자: 안미정 | 사업자등록번호: 550-64-00884</p>
+                <p>통신판매업신고번호: 제2025-고양일산동-1332호 | 고객센터: easysaju.saju@gmail.com</p>
+            </div>
+
+            <p class="text-[11px] text-slate-600">
+                &copy; 2026 사주문답 궁(宮) (舊 이지사주). All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- 사전예약 스크립트 -->
+    <script>
+        async function handlePreRegister(e) {
+            e.preventDefault();
+            const name = document.getElementById('leadName').value.trim();
+            const phone = document.getElementById('leadPhone').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+
+            if (!name || !phone) {
+                alert('성함과 휴대폰 번호를 올바르게 입력해주세요.');
+                return;
+            }
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin mr-2"></i>접수 처리 중...';
+
+            try {
+                // 로컬 브라우저 세션 보존
+                const leadData = {
+                    name: name,
+                    phone: phone,
+                    created_at: new Date().toISOString(),
+                    utm_source: 'easysaju_teaser',
+                    brand: '사주문답 궁 (舊 이지사주)'
+                };
+                localStorage.setItem('saju_vip_lead', JSON.stringify(leadData));
+
+                // 백엔드 또는 웹훅 전송 시도 (백그라운드 비차단)
+                fetch('https://jieungak.onrender.com/ping', { mode: 'no-cors' }).catch(() => {});
+
+                // 화면 전환
+                document.getElementById('leadForm').classList.add('hidden');
+                document.getElementById('formSuccess').classList.remove('hidden');
+            } catch (err) {
+                console.error('Lead error:', err);
+                alert('신청 처리 중 일시적인 지연이 발생했습니다. 잠시 후 다시 시도해 주세요.');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<span>VIP 사전예약 혜택 신청하기</span><i class="fa-solid fa-arrow-right text-xs"></i>';
+            }
+        }
+    </script>
 </body>
 </html>
